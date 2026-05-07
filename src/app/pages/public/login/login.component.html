@@ -1,0 +1,110 @@
+<div class="login">
+
+  <!-- Panel izquierdo -->
+  <div class="login__panel">
+    <div class="login__panel-content">
+      <img src="assets/images/navbar/logo.png" alt="Blendlap" class="login__logo">
+      <h2>Bienvenido de nuevo</h2>
+      <p>Inicia sesión para gestionar tus citas y disfrutar de la experiencia Blendlap</p>
+      <div class="login__panel-stats">
+        <div class="stat">
+          <span class="stat__numero">500+</span>
+          <span class="stat__label">Clientes</span>
+        </div>
+        <div class="stat">
+          <span class="stat__numero">5★</span>
+          <span class="stat__label">Calificación</span>
+        </div>
+        <div class="stat">
+          <span class="stat__numero">3+</span>
+          <span class="stat__label">Años</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel derecho — Formulario -->
+  <div class="login__form-panel">
+    <div class="login__form-container">
+
+      <a routerLink="/" class="login__back">
+        <i class="fas fa-arrow-left"></i> Volver al inicio
+      </a>
+
+      <h1>Iniciar sesión</h1>
+      <p class="login__subtitle">Ingresa tus credenciales para continuar</p>
+
+      <!-- Error -->
+      <div class="login__error" *ngIf="error">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
+
+      <!-- Formulario -->
+      <div class="login__form">
+
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input type="email" [(ngModel)]="correo" placeholder="correo@ejemplo.com" (keyup.enter)="login()">
+          </div>
+        </div>
+
+        <div class="form-group">
+  <label>Contraseña</label>
+
+  <div class="input-wrapper">
+    <i class="fas fa-lock"></i>
+
+    <input
+      [type]="mostrarPassword ? 'text' : 'password'"
+      [(ngModel)]="contrasena"
+      placeholder="Tu contraseña"
+      (keyup.enter)="login()"
+    >
+  </div>
+
+  <!-- 👇 NUEVO: checkbox estilo Google -->
+  <label class="mostrar-password">
+    <input
+      type="checkbox"
+      [(ngModel)]="mostrarPassword"
+      name="mostrarPassword"
+    >
+    Mostrar contraseña
+  </label>
+</div>
+
+        <div class="login__opciones">
+          <a routerLink="/recuperar-password" class="login__forgot">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+        <!-- Separador -->
+        <div class="login__separador">
+          <span></span>
+          <p>o continúa con</p>
+          <span></span>
+        </div>
+
+        <!-- Botón Google -->
+        <div id="google-btn"></div>
+
+        <button class="login__btn" (click)="login()" [disabled]="cargando">
+          <span *ngIf="!cargando">Iniciar sesión</span>
+          <span *ngIf="cargando">
+            <i class="fas fa-spinner fa-spin"></i> Cargando...
+          </span>
+        </button>
+
+        <p class="login__registro">
+          ¿No tienes cuenta?
+          <a [routerLink]="['/registro']" [queryParams]="{returnUrl: returnUrl}">Registrarse</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+</div>

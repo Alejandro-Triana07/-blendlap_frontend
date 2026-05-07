@@ -1,0 +1,107 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Router } from '@angular/router';
+
+export interface IUsuario {
+  id_usuario: number;
+  nombre: string;
+  apellido: string;
+  correo_electronico: string;
+  rol: 'admin' | 'barbero' | 'cliente';
+}
+
+export interface ILoginResponse {
+  ok: boolean;
+  token: string;
+  usuario: IUsuario;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  private apiUrl = 'http://localhost:3000/api/auth';
+  private usuarioSubject = new BehaviorSubject<IUsuario | null>(null);
+  usuario$ = this.usuarioSubject.asObservable();
+
+  constructor(private http: HttpClient, private router: Router) {
+    this.cargarUsuario();
+  }
+
+  // Cargar usuario desde localStorage al iniciar
+  private cargarUsuario(): void {
+    const token = localStorage.getItem('token');
+    const usuario = localStorage.getItem('usuario');
+    if (token && usuario) {
+      this.usuarioSubject.next(JSON.parse(usuario));
+    }
+  }
+
+  // Login
+  login(correo_electronico: string, contrasena: string): Observable<ILoginResponse> {
+    return this.http.post<ILoginResponse>(`${this.apiUrl}/login`, {
+      correo_electronico,
+      contrasena
+    }).pipe(
+      tap(res => {
+        if (res.ok) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('usuario', JSON.stringify(res.usuario));
+          this.usuarioSubject.next(res.usuario);
+        }
+      })
+    );
+  }
+
+  // Registro
+  registro(data: any): Observable<ILoginResponse> {
+    return this.http.post<ILoginResponse>(`${this.apiUrl}/registro`, data).pipe(
+      tap(res => {
+        if (res.ok) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('usuario', JSON.stringify(res.usuario));
+          this.usuarioSubject.next(res.usuario);
+        }
+      })
+    );
+  }
+
+  // Logout
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    this.usuarioSubject.next(null);
+    this.router.navigate(['/']);
+  }
+
+  // Getters
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  getUsuario(): IUsuario | null {
+    return this.usuarioSubject.value;
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
+  getRol(): string | null {
+    return this.getUsuario()?.rol || null;
+  }
+  // Google Login
+loginConGoogle(token: string): Observable<ILoginResponse> {
+  return this.http.post<ILoginResponse>(`${this.apiUrl}/google`, { token }).pipe(
+    tap(res => {
+      if (res.ok) {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('usuario', JSON.stringify(res.usuario));
+        this.usuarioSubject.next(res.usuario);
+      }
+    })
+  );
+}
+}

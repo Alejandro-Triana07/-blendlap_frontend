@@ -1,0 +1,91 @@
+<div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+
+        <!-- Logo -->
+        <div class="sidebar__logo">
+            <img src="/assets/images/navbar/logo.png" alt="Blendlap">
+            <span *ngIf="!sidebarCollapsed">Blendlap</span>
+        </div>
+
+        <!-- Nav -->
+        <nav class="sidebar__nav">
+            <a routerLink="/admin/dashboard" routerLinkActive="active" class="sidebar__item">
+                <i class="fas fa-chart-line"></i>
+                <span *ngIf="!sidebarCollapsed">Dashboard</span>
+            </a>
+            <a routerLink="/admin/reservas" routerLinkActive="active" class="sidebar__item">
+                <i class="fas fa-calendar-check"></i>
+                <span *ngIf="!sidebarCollapsed">Reservas</span>
+            </a>
+            <a routerLink="/admin/clientes" routerLinkActive="active" class="sidebar__item">
+                <i class="fas fa-users"></i>
+                <span *ngIf="!sidebarCollapsed">Clientes</span>
+            </a>
+            <a routerLink="/admin/barberos" routerLinkActive="active" class="sidebar__item">
+                <i class="fas fa-user-tie"></i>
+                <span *ngIf="!sidebarCollapsed">Barberos</span>
+            </a>
+            <a routerLink="/admin/servicios" routerLinkActive="active" class="sidebar__item">
+                <i class="fas fa-cut"></i>
+                <span *ngIf="!sidebarCollapsed">Servicios</span>
+            </a>
+            <a routerLink="/admin/productos" routerLinkActive="active" class="sidebar__item">
+                <i class="fas fa-box"></i>
+                <span *ngIf="!sidebarCollapsed">Productos</span>
+            </a>
+            <a routerLink="/admin/ventas" routerLinkActive="active" class="sidebar__item">
+                <i class="fas fa-cash-register"></i>
+                <span *ngIf="!sidebarCollapsed">Ventas</span>
+            </a>
+            <a routerLink="/admin/turnos" routerLinkActive="active" class="sidebar__item">
+                <i class="fas fa-clock"></i>
+                <span *ngIf="!sidebarCollapsed">Turnos</span>
+            </a>
+            <a routerLink="/admin/reportes" routerLinkActive="active" class="sidebar__item">
+                <i class="fas fa-chart-bar"></i>
+                <span *ngIf="!sidebarCollapsed">Reportes</span>
+            </a>
+        </nav>
+
+        <!-- Footer sidebar -->
+        <div class="sidebar__footer">
+            <button class="sidebar__item" (click)="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span *ngIf="!sidebarCollapsed">Cerrar sesión</span>
+            </button>
+        </div>
+
+    </aside>
+
+    <!-- Main -->
+    <div class="admin-main" [class.expanded]="sidebarCollapsed">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <button class="topbar__toggle" (click)="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="topbar__right">
+                <div class="topbar__usuario">
+                    <div class="topbar__avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="topbar__info" *ngIf="usuario">
+                        <span class="topbar__nombre">{{ usuario.nombre }} {{ usuario.apellido }}</span>
+                        <span class="topbar__rol">Administrador</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenido -->
+        <main class="admin-content">
+            <router-outlet></router-outlet>
+        </main>
+
+    </div>
+
+</div>

@@ -1,0 +1,284 @@
+.footer {
+  background: var(--color-primary);
+  color: var(--color-white);
+
+  // ─── Franja superior ─────────────────────────────────────
+  &__top {
+    background: var(--color-accent);
+    padding: 30px 0;
+
+    .btn-reservar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--color-primary);
+      color: var(--color-white);
+      padding: 0.9rem 2rem;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 2px solid var(--color-primary);
+      transition: var(--transition);
+      cursor: pointer;
+      white-space: nowrap;
+
+      &:hover {
+        background: transparent;
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  &__top-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  &__cta {
+    h3 {
+      font-size: 1.4rem;
+      color: var(--color-primary);
+      font-family: var(--font-primary);
+      margin-bottom: 0.3rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: rgba(26, 26, 26, 0.7);
+    }
+  }
+
+  // ─── Cuerpo ──────────────────────────────────────────────
+  &__body {
+    padding: 70px 0 50px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr 1fr 1.4fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  // ─── Columnas ────────────────────────────────────────────
+  &__col {
+    &-title {
+      font-family: var(--font-secondary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background: var(--color-accent);
+      }
+    }
+  }
+
+  // ─── Logo ────────────────────────────────────────────────
+  &__logo {
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    gap: 4px;
+
+    img {
+      height: 55px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    &-nombre {
+      font-family: var(--font-primary);
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--color-accent);
+      letter-spacing: 3px;
+    }
+
+    &-sub {
+      font-family: var(--font-secondary);
+      font-size: 0.55rem;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+    }
+  }
+
+  &__descripcion {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  // ─── Redes ───────────────────────────────────────────────
+  &__redes {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  // ─── Links ───────────────────────────────────────────────
+  &__links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-left: 0;
+
+    li a {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.9rem;
+      transition: var(--transition);
+
+      &:hover {
+        color: var(--color-accent);
+        padding-left: 5px;
+      }
+    }
+  }
+
+  // ─── Contacto ────────────────────────────────────────────
+  &__contacto {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.9rem;
+
+      i {
+        color: var(--color-accent);
+        font-size: 0.95rem;
+        margin-top: 2px;
+        min-width: 16px;
+      }
+
+      a {
+        color: rgba(255, 255, 255, 0.55);
+        transition: var(--transition);
+
+        &:hover {
+          color: var(--color-accent);
+        }
+      }
+    }
+  }
+
+  // ─── Bottom ──────────────────────────────────────────────
+  &__bottom {
+    padding: 20px 0;
+  }
+
+  &__bottom-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    p {
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 0.8rem;
+
+      strong {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      i {
+        color: #e25555;
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+// ─── Iconos de redes ─────────────────────────────────────────
+.red-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.08);
+  transition: var(--transition);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: transparent;
+  }
+
+  &.instagram:hover {
+    background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  }
+
+  &.whatsapp:hover {
+    background: #25d366;
+  }
+
+  &.facebook:hover {
+    background: #1877f2;
+  }
+
+  &.tiktok:hover {
+    background: #010101;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// ─── Responsive ──────────────────────────────────────────────
+@media (max-width: 1024px) {
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    &__top-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    &__bottom-content {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+}

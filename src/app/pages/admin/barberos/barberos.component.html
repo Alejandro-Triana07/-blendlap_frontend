@@ -1,0 +1,218 @@
+<div class="barberos-page">
+
+    <div class="page-header">
+        <div class="page-header__left">
+            <h1 class="page-header__title">Barberos</h1>
+            <p class="page-header__sub">Gestiona el equipo de la barbería</p>
+        </div>
+        <button class="btn-nuevo" (click)="abrirModal()">
+            <i class="fas fa-plus"></i>
+            Nuevo barbero
+        </button>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Buscar barbero..." [(ngModel)]="busqueda" (input)="filtrar()" />
+        </div>
+        <span class="toolbar__count">{{ barberosFiltrados.length }} barberos</span>
+    </div>
+
+    <div class="error-msg" *ngIf="error">
+        <i class="fas fa-exclamation-circle"></i> {{ error }}
+    </div>
+
+    <div class="cargando" *ngIf="cargando">
+        <i class="fas fa-spinner fa-spin"></i> Cargando barberos...
+    </div>
+
+    <div class="barberos-grid" *ngIf="!cargando">
+        <div class="barbero-card" *ngFor="let b of barberosFiltrados">
+
+            <div class="barbero-card__foto">
+                <img *ngIf="b.foto" [src]="'http://localhost:3000/images/barberos/' + b.foto" [alt]="b.nombre" />
+                <div *ngIf="!b.foto" class="barbero-card__foto--empty">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+            </div>
+
+            <div class="barbero-card__body">
+                <div class="barbero-card__top">
+                    <span class="barbero-card__especialidad">{{ b.titulo || 'Barbero' }}</span>
+                    <span class="badge-activo" *ngIf="b.estado === 'activo'">
+                        <i class="fas fa-circle"></i> Activo
+                    </span>
+                    <span class="badge-inactivo" *ngIf="b.estado === 'inactivo'">
+                        <i class="fas fa-circle"></i> Inactivo
+                    </span>
+                </div>
+
+                <h3 class="barbero-card__nombre">{{ b.nombre }} {{ b.apellido }}</h3>
+                <p class="barbero-card__desc">{{ b.descripcion || 'Sin descripción' }}</p>
+
+                <div class="barbero-card__estrellas" *ngIf="b.promedio_estrellas > 0">
+                    <i class="fas fa-star" *ngFor="let s of getEstrellas(b.promedio_estrellas)"></i>
+                    <span>{{ b.promedio_estrellas | number:'1.1-1' }}</span>
+                    <span class="resenas">({{ b.total_resenas }} reseñas)</span>
+                </div>
+
+                <div class="barbero-card__stats">
+                    <div class="stat">
+                        <i class="fas fa-calendar-check"></i>
+                        <div>
+                            <span class="stat-val">{{ b.total_agendamientos || 0 }}</span>
+                            <span class="stat-label">agendamientos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="barbero-card__acciones">
+                    <ng-container *ngIf="b.estado === 'activo'">
+                        <button class="btn-accion btn-accion--editar" (click)="abrirModal(b)">
+                            <i class="fas fa-pen"></i> Editar
+                        </button>
+                        <button class="btn-accion btn-accion--eliminar" (click)="confirmarEliminar(b)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </ng-container>
+                    <button class="btn-accion btn-accion--reactivar" *ngIf="b.estado === 'inactivo'"
+                        (click)="reactivar(b)">
+                        <i class="fas fa-redo"></i> Reactivar
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="barberos-empty" *ngIf="barberosFiltrados.length === 0">
+            <i class="fas fa-user-tie"></i>
+            <p>No hay barberos registrados</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal Crear / Editar -->
+<div class="modal-overlay" *ngIf="modalVisible" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <div class="modal__header">
+            <h2 class="modal__title">
+                <i class="fas fa-user-tie"></i>
+                {{ editando ? 'Editar barbero' : 'Nuevo barbero' }}
+            </h2>
+            <button class="modal__close" (click)="cerrarModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal__body">
+            <form (ngSubmit)="guardar()" #form="ngForm">
+
+                <div class="form-group">
+                    <label>Foto</label>
+                    <div class="foto-upload">
+                        <div class="foto-preview" *ngIf="previewFoto">
+                            <img [src]="previewFoto" alt="preview" />
+                            <button type="button" class="foto-preview__remove"
+                                (click)="previewFoto = ''; archivoSeleccionado = null">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="file-input" (click)="seleccionarFoto()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>{{ previewFoto ? 'Cambiar foto' : 'Seleccionar foto' }}</span>
+                            <input #fileInput type="file" accept="image/jpeg,image/png,image/webp"
+                                (change)="onFileChange($event)" hidden />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre <span class="required">*</span></label>
+                        <input type="text" [(ngModel)]="formulario.nombre" name="nombre" required
+                            placeholder="Ej: Carlos" />
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido <span class="required">*</span></label>
+                        <input type="text" [(ngModel)]="formulario.apellido" name="apellido" required
+                            placeholder="Ej: Mendoza" />
+                    </div>
+                </div>
+
+                <div class="form-group" *ngIf="!editando">
+                    <label>Correo <span class="required">*</span></label>
+                    <input type="email" [(ngModel)]="formulario.correo_electronico" name="correo" required
+                        placeholder="correo@ejemplo.com" />
+                </div>
+
+                <div class="form-group" *ngIf="!editando">
+                    <label>Contraseña <span class="required">*</span></label>
+                    <input type="password" [(ngModel)]="formulario.contrasena" name="contrasena" required
+                        placeholder="Mínimo 8 caracteres" />
+                </div>
+
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" [(ngModel)]="formulario.titulo" name="titulo" placeholder="Ej: Master Barber" />
+                </div>
+                <div class="form-group">
+                    <label>Especialidades</label>
+                    <input type="text" [(ngModel)]="formulario.especialidades" name="especialidades"
+                        placeholder="Ej: Fade clásico,Barba perfilada,Diseños" />
+                    <small style="color: var(--color-gray); font-size: 0.75rem;">Separa las especialidades con
+                        comas</small>
+                </div>
+                <div class="form-group">
+                    <label>Años de experiencia</label>
+                    <input type="number" [(ngModel)]="formulario.experiencia" name="experiencia" min="0"
+                        placeholder="Ej: 5" />
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea [(ngModel)]="formulario.descripcion" name="descripcion" rows="3"
+                        placeholder="Describe al barbero..."></textarea>
+                </div>
+
+                <div class="modal__footer">
+                    <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn-guardar" [disabled]="form.invalid || guardando">
+                        <i class="fas" [ngClass]="guardando ? 'fa-spinner fa-spin' : 'fa-check'"></i>
+                        {{ guardando ? 'Guardando...' : (editando ? 'Guardar cambios' : 'Crear barbero') }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal Desactivar -->
+<div class="modal-overlay" *ngIf="modalEliminar" (click)="modalEliminar = false">
+    <div class="modal modal--sm" (click)="$event.stopPropagation()">
+        <div class="modal__header modal__header--danger">
+            <h2 class="modal__title">
+                <i class="fas fa-user-slash"></i>
+                Desactivar barbero
+            </h2>
+        </div>
+        <div class="modal__body">
+            <p class="modal__confirm-text">
+                ¿Estás seguro de desactivar a <strong>{{ barberoAEliminar?.nombre }} {{ barberoAEliminar?.apellido
+                    }}</strong>?
+                El barbero no aparecerá en el home ni podrá recibir reservas, pero su historial se conservará.
+            </p>
+        </div>
+        <div class="modal__footer">
+            <button class="btn-cancelar" (click)="modalEliminar = false">Cancelar</button>
+            <button class="btn-eliminar" (click)="eliminar()" [disabled]="eliminando">
+                <i class="fas" [ngClass]="eliminando ? 'fa-spinner fa-spin' : 'fa-user-slash'"></i>
+                {{ eliminando ? 'Desactivando...' : 'Desactivar' }}
+            </button>
+        </div>
+    </div>
+</div>

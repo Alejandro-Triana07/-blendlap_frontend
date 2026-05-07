@@ -1,0 +1,45 @@
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="container navbar__container">
+
+    <a routerLink="/" class="navbar__logo">
+      <img src="assets/images/navbar/logooo.png" alt="Blendlap">
+      <!-- <div class="navbar__logo-text">
+        <span class="navbar__logo-nombre">BLENDLAP</span>
+        <span class="navbar__logo-sub">B A R B E R Í A</span>
+      </div> -->
+    </a>
+
+    <ul class="navbar__links" [class.active]="menuOpen">
+      <li><a (click)="scrollTo('equipo')">Equipo</a></li>
+      <li><a (click)="scrollTo('productos')">Productos</a></li>
+      <li><a (click)="scrollTo('galeria')">Galería</a></li>
+      <li><a (click)="scrollTo('ubicacion')">Ubicación</a></li>
+
+      <!-- No logueado -->
+      <li *ngIf="!usuario">
+        <a routerLink="/login" class="btn-nav" (click)="closeMenu()">Iniciar Sesión</a>
+      </li>
+
+      <!-- Logueado -->
+      <li *ngIf="usuario" class="navbar__usuario">
+        <div class="navbar__avatar" (click)="irADashboard()">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="navbar__user-info">
+          <span class="navbar__nombre">{{ usuario.nombre }}</span>
+          <span class="navbar__rol">{{ usuario.rol }}</span>
+        </div>
+        <button class="navbar__logout" (click)="logout()" title="Cerrar sesión">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </li>
+    </ul>
+
+    <button class="navbar__hamburger" (click)="toggleMenu()" [class.active]="menuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+</nav>

@@ -1,0 +1,159 @@
+<div class="servicios-page">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-header__title">Servicios</h1>
+      <p class="page-header__sub">Gestiona los servicios de la barbería</p>
+    </div>
+    <button class="btn-nuevo" (click)="abrirModal()">
+      <i class="fas fa-plus"></i>
+      Nuevo servicio
+    </button>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Buscar servicio..." [(ngModel)]="busqueda" (input)="filtrar()" />
+    </div>
+    <span class="toolbar__count">{{ serviciosFiltrados.length }} servicios</span>
+  </div>
+
+  <div class="tabla-wrapper">
+  <div class="servicios-grid">
+    <div class="servicio-card" *ngFor="let s of serviciosFiltrados">
+
+      <div class="servicio-card__img">
+        <img *ngIf="s.imagen" [src]="'http://localhost:3000/images/servicios/' + s.imagen" [alt]="s.nombre_servicio" />
+        <div *ngIf="!s.imagen" class="servicio-card__img--empty">
+          <i class="fas fa-cut"></i>
+        </div>
+        <span class="servicio-card__duracion">
+          <i class="fas fa-clock"></i> {{ s.duracion }} min
+        </span>
+      </div>
+
+      <div class="servicio-card__body">
+        <h3 class="servicio-card__nombre">{{ s.nombre_servicio }}</h3>
+        <p class="servicio-card__desc">{{ s.descripcion || 'Sin descripción' }}</p>
+        <div class="servicio-card__footer">
+          <span class="servicio-card__precio">${{ s.precio | number:'1.0-0' }}</span>
+          <div class="servicio-card__acciones">
+            <button class="btn-accion btn-accion--editar" (click)="abrirModal(s)" title="Editar">
+              <i class="fas fa-pen"></i>
+            </button>
+            <button class="btn-accion btn-accion--eliminar" (click)="confirmarEliminar(s)" title="Eliminar">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="servicios-grid__empty" *ngIf="serviciosFiltrados.length === 0">
+      <i class="fas fa-scissors"></i>
+      <p>No se encontraron servicios</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- Modal Crear / Editar -->
+<div class="modal-overlay" *ngIf="modalVisible" (click)="cerrarModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal__header">
+      <h2 class="modal__title">
+        <i class="fas fa-cut"></i>
+        {{ editando ? 'Editar servicio' : 'Nuevo servicio' }}
+      </h2>
+      <button class="modal__close" (click)="cerrarModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal__body">
+      <form (ngSubmit)="guardar()" #form="ngForm">
+
+        <div class="form-group">
+          <label>Nombre <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="formulario.nombre_servicio" name="nombre" required maxlength="150" placeholder="Ej: Corte clásico" />
+        </div>
+
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="formulario.descripcion" name="descripcion" rows="3" placeholder="Describe el servicio..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Precio (COP) <span class="required">*</span></label>
+            <div class="input-prefix">
+              <span>$</span>
+              <input type="number" [(ngModel)]="formulario.precio" name="precio" required min="0" placeholder="0" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Duración (min) <span class="required">*</span></label>
+            <div class="input-prefix">
+              <span><i class="fas fa-clock"></i></span>
+              <input type="number" [(ngModel)]="formulario.duracion" name="duracion" required min="1" placeholder="30" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Imagen</label>
+          <div class="imagen-preview" *ngIf="previewImagen">
+            <img [src]="previewImagen" [alt]="formulario.nombre_servicio" />
+            <button type="button" class="imagen-preview__remove" (click)="previewImagen = ''; archivoSeleccionado = null; formulario.imagen = ''">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="file-input" (click)="seleccionarImagen()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>{{ previewImagen ? 'Cambiar imagen' : 'Seleccionar imagen' }}</span>
+            <input #fileInput type="file" accept="image/jpeg,image/png,image/webp" (change)="onFileChange($event)" hidden />
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn-guardar" [disabled]="form.invalid || guardando">
+            <i class="fas" [ngClass]="guardando ? 'fa-spinner fa-spin' : 'fa-check'"></i>
+            {{ guardando ? 'Guardando...' : (editando ? 'Guardar cambios' : 'Crear servicio') }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Confirmar Eliminar -->
+<div class="modal-overlay" *ngIf="modalEliminar" (click)="modalEliminar = false">
+  <div class="modal modal--sm" (click)="$event.stopPropagation()">
+    <div class="modal__header modal__header--danger">
+      <h2 class="modal__title">
+        <i class="fas fa-trash"></i>
+        Eliminar servicio
+      </h2>
+    </div>
+    <div class="modal__body">
+      <p class="modal__confirm-text">
+        ¿Estás seguro de eliminar <strong>{{ servicioAEliminar?.nombre_servicio }}</strong>?
+        Esta acción no se puede deshacer.
+      </p>
+    </div>
+    <div class="modal__footer">
+      <button class="btn-cancelar" (click)="modalEliminar = false">Cancelar</button>
+      <button class="btn-eliminar" (click)="eliminar()" [disabled]="eliminando">
+        <i class="fas" [ngClass]="eliminando ? 'fa-spinner fa-spin' : 'fa-trash'"></i>
+        {{ eliminando ? 'Eliminando...' : 'Eliminar' }}
+      </button>
+    </div>
+  </div>
+</div>
