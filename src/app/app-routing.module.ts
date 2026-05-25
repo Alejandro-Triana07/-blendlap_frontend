@@ -27,6 +27,8 @@ import { CarritoComponent } from './pages/public/carrito/carrito.component';
 import { ClienteLayoutComponent } from './layouts/cliente-layout/cliente-layout.component';
 import { HistoriaComponent } from './pages/public/nosotros/historia/historia.component';
 import { RecuperarPasswordComponent } from './pages/public/recuperar-password/recuperar-password.component';
+import { CheckoutComponent } from './pages/public/checkout/checkout.component';
+import { PagoResultadoComponent } from './pages/public/pago-resultado/pago-resultado.component';
 
 const routes: Routes = [
   { path: 'nosotros/historia', redirectTo: 'nosotros', pathMatch: 'full' },
@@ -47,7 +49,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
   { path: 'recuperar-password', component: RecuperarPasswordComponent },
-  { path: 'carrito', component: CarritoComponent },
+  { path: 'carrito',        component: CarritoComponent },
+  { path: 'checkout',       component: CheckoutComponent },
+  { path: 'pago/resultado', component: PagoResultadoComponent },
 
   // Admin
   {

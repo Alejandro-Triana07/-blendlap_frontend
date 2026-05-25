@@ -15,7 +15,7 @@
         <span class="tab-badge" *ngIf="citasHoy.length > 0">{{ citasHoy.length }}</span>
       </button>
       <button class="tab" [class.active]="navActual === 'proximas'" (click)="navActual = 'proximas'">
-        Proximas
+        Próximas
         <span class="tab-badge" *ngIf="proximas.length > 0">{{ proximas.length }}</span>
       </button>
     </div>
@@ -107,8 +107,8 @@
 
       <div class="empty-state" *ngIf="proximas.length === 0">
         <div class="empty-state__icon"><i class="fas fa-calendar-plus"></i></div>
-        <h3>No tienes citas proximas</h3>
-        <p>Tu agenda futura esta libre</p>
+        <h3>No tienes citas próximas</h3>
+        <p>Tu agenda futura está libre</p>
       </div>
 
       <div class="proximas-list" *ngIf="proximas.length > 0">
@@ -162,7 +162,7 @@
         <span class="det-valor">{{ formatHora(citaSeleccionada?.hora || '') }}</span>
       </div>
       <div class="det-fila">
-        <span class="det-label">Duracion</span>
+        <span class="det-label">Duración</span>
         <span class="det-valor">{{ citaSeleccionada?.duracion_total }} min</span>
       </div>
       <div class="det-fila">
@@ -188,13 +188,13 @@
       <i class="fas fa-check-circle"></i>
     </div>
     <h3>Marcar como completada</h3>
-    <p>Confirmas que el servicio con <strong>{{ citaSeleccionada?.nombre_cliente }}</strong> fue completado?</p>
+    <p>¿Confirmas que el servicio con <strong>{{ citaSeleccionada?.nombre_cliente }}</strong> fue completado?</p>
     <div class="modal-accion__btns">
       <button class="btn-modal-cancel" (click)="modalCompletar = false">No</button>
       <button class="btn-modal-ok" (click)="completarCita()" [disabled]="procesando">
         <i class="fas fa-spinner fa-spin" *ngIf="procesando"></i>
         <i class="fas fa-check" *ngIf="!procesando"></i>
-        {{ procesando ? 'Procesando...' : 'Si, completar' }}
+        {{ procesando ? 'Procesando...' : 'Sí, completar' }}
       </button>
     </div>
   </div>
@@ -207,13 +207,13 @@
       <i class="fas fa-times-circle"></i>
     </div>
     <h3>Cancelar cita</h3>
-    <p>Seguro que deseas cancelar la cita de <strong>{{ citaSeleccionada?.nombre_cliente }}</strong>?</p>
+    <p>¿Estás seguro de que deseas cancelar la cita de <strong>{{ citaSeleccionada?.nombre_cliente }}</strong>?</p>
     <div class="modal-accion__btns">
       <button class="btn-modal-cancel" (click)="modalCancelar = false">No, mantener</button>
       <button class="btn-modal-danger" (click)="cancelarCita()" [disabled]="procesando">
         <i class="fas fa-spinner fa-spin" *ngIf="procesando"></i>
         <i class="fas fa-times" *ngIf="!procesando"></i>
-        {{ procesando ? 'Procesando...' : 'Si, cancelar' }}
+        {{ procesando ? 'Procesando...' : 'Sí, cancelar' }}
       </button>
     </div>
   </div>

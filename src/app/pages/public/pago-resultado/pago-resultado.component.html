@@ -1,0 +1,113 @@
+<div class="resultado">
+
+  <!-- ══ VERIFICANDO ══ -->
+  <div class="resultado-card" *ngIf="estado === 'verificando'">
+    <div class="estado-icon estado-icon--spin">
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </div>
+    <h1>Verificando tu pago</h1>
+    <p>Estamos confirmando el pago con Wompi. Esto puede tardar unos segundos...</p>
+    <div class="progress-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- ══ APROBADO ══ -->
+  <div class="resultado-card resultado-card--ok" *ngIf="estado === 'aprobado'">
+    <div class="estado-icon estado-icon--ok">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <div class="confetti-wrap" aria-hidden="true">
+      <span *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+            [style.--i]="i"></span>
+    </div>
+
+    <h1>¡Pago exitoso!</h1>
+    <p>Tu pedido fue confirmado y registrado en nuestro sistema.</p>
+
+    <div class="resultado-info-grid">
+      <div class="info-item" *ngIf="referencia">
+        <span class="info-label">Referencia</span>
+        <span class="info-value">{{ referencia }}</span>
+      </div>
+      <div class="info-item" *ngIf="idVenta">
+        <span class="info-label">N° Venta</span>
+        <span class="info-value">#{{ idVenta }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Estado</span>
+        <span class="info-value text-green">
+          <i class="fas fa-check-circle"></i> Aprobado
+        </span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Retiro</span>
+        <span class="info-value">En tienda Blendlap</span>
+      </div>
+    </div>
+
+    <div class="resultado-nota">
+      <i class="fas fa-store"></i>
+      <p>Muestra esta referencia en nuestra tienda para recoger tus productos.
+         Recibirás confirmación por tu correo registrado.</p>
+    </div>
+
+    <div class="resultado-actions">
+      <button class="btn-principal" (click)="irAlInicio()">
+        <i class="fas fa-home"></i> Ir a la tienda
+      </button>
+      <button class="btn-secundario" (click)="irAlDashboard()">
+        <i class="fas fa-receipt"></i> Ver mis compras
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ RECHAZADO ══ -->
+  <div class="resultado-card resultado-card--err" *ngIf="estado === 'rechazado'">
+    <div class="estado-icon estado-icon--err">
+      <i class="fas fa-times-circle"></i>
+    </div>
+    <h1>Pago rechazado</h1>
+    <p>{{ mensaje || 'Tu pago fue rechazado por la entidad bancaria.' }}</p>
+
+    <div class="resultado-nota resultado-nota--warn">
+      <i class="fas fa-info-circle"></i>
+      <p>Esto puede suceder por fondos insuficientes, datos incorrectos o restricciones del banco.
+         Tu carrito sigue guardado — intenta con otra tarjeta o método de pago.</p>
+    </div>
+
+    <div class="resultado-actions">
+      <button class="btn-principal" (click)="irAlCheckout()">
+        <i class="fas fa-redo"></i> Intentar de nuevo
+      </button>
+      <button class="btn-secundario" (click)="irAlCarrito()">
+        <i class="fas fa-shopping-basket"></i> Ver carrito
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ ERROR ══ -->
+  <div class="resultado-card resultado-card--err" *ngIf="estado === 'error'">
+    <div class="estado-icon estado-icon--err">
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h1>Algo salió mal</h1>
+    <p>{{ mensaje || 'No pudimos verificar tu transacción en este momento.' }}</p>
+
+    <div class="resultado-nota resultado-nota--warn">
+      <i class="fas fa-info-circle"></i>
+      <p>Si tu dinero fue descontado, comunícate con nosotros e indica el ID de transacción:
+         <strong>{{ transactionId }}</strong></p>
+    </div>
+
+    <div class="resultado-actions">
+      <button class="btn-principal" (click)="irAlInicio()">
+        <i class="fas fa-home"></i> Volver al inicio
+      </button>
+      <button class="btn-secundario" (click)="irAlCarrito()">
+        <i class="fas fa-shopping-basket"></i> Ver carrito
+      </button>
+    </div>
+  </div>
+
+</div>

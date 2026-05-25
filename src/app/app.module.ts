@@ -28,6 +28,8 @@ import { RegistroComponent } from './pages/public/registro/registro.component';
 import { AgendarComponent } from './pages/public/agendar/agendar.component';
 import { CarritoComponent } from './pages/public/carrito/carrito.component';
 import { RecuperarPasswordComponent } from './pages/public/recuperar-password/recuperar-password.component';
+import { CheckoutComponent } from './pages/public/checkout/checkout.component';
+import { PagoResultadoComponent } from './pages/public/pago-resultado/pago-resultado.component';
 
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { ReservasComponent } from './pages/admin/reservas/reservas.component';
@@ -67,6 +69,8 @@ import { ValoresComponent } from './pages/public/nosotros/valores/valores.compon
     AgendarComponent,
     CarritoComponent,
     RecuperarPasswordComponent,
+    CheckoutComponent,
+    PagoResultadoComponent,
     DashboardComponent,
     ReservasComponent,
     ClientesComponent,

@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
   cantidadCarrito = 0;
   creditosAprobados = 0;
   activeSection = '';
+  tabActualCliente = 'actuales';
   private readonly publicSections = ['equipo', 'servicios', 'productos', 'galeria'];
 
   constructor(
@@ -43,6 +44,8 @@ export class NavbarComponent implements OnInit {
     this.carritoService.items$.subscribe(items => {
       this.cantidadCarrito = items.reduce((sum, i) => sum + i.cantidad, 0);
     });
+
+    this.tabService.tab$.subscribe(tab => { this.tabActualCliente = tab; });
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {

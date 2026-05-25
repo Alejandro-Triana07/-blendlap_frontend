@@ -105,6 +105,22 @@
       <i class="fas fa-exclamation-circle"></i> {{ error }}
     </div>
 
+    <!-- Botón pago en línea Wompi -->
+    <button class="drawer__btn-wompi" (click)="irAlCheckout()">
+      <span class="drawer__btn-wompi__left">
+        <i class="fas fa-lock"></i> Pagar en línea
+      </span>
+      <span class="drawer__btn-wompi__right">
+        <span>{{ formatCurrency(total) }}</span>
+        <i class="fas fa-arrow-right"></i>
+      </span>
+    </button>
+
+    <!-- Separador -->
+    <div class="drawer__sep">
+      <span></span><p>o paga después</p><span></span>
+    </div>
+
     <button class="drawer__btn-solicitar" (click)="solicitar()" [disabled]="enviando">
       <span *ngIf="!enviando"><i class="fas fa-paper-plane"></i> Solicitar crédito</span>
       <span *ngIf="enviando"><i class="fas fa-spinner fa-spin"></i> Enviando...</span>

@@ -92,6 +92,28 @@ export class AuthService {
   getRol(): string | null {
     return this.getUsuario()?.rol || null;
   }
+  solicitarVerificacionRegistro(data: any): Observable<{ ok: boolean; mensaje: string }> {
+    return this.http.post<{ ok: boolean; mensaje: string }>(
+      `${this.apiUrl}/solicitar-verificacion-registro`,
+      data
+    );
+  }
+
+  completarRegistro(correo_electronico: string, codigo: string): Observable<ILoginResponse> {
+    return this.http.post<ILoginResponse>(
+      `${this.apiUrl}/completar-registro`,
+      { correo_electronico, codigo }
+    ).pipe(
+      tap(res => {
+        if (res.ok) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('usuario', JSON.stringify(res.usuario));
+          this.usuarioSubject.next(res.usuario);
+        }
+      })
+    );
+  }
+
   solicitarRecuperacion(correo_electronico: string): Observable<{ ok: boolean; mensaje: string }> {
     return this.http.post<{ ok: boolean; mensaje: string }>(
       `${this.apiUrl}/solicitar-recuperacion`,

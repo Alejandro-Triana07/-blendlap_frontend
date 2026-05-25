@@ -66,6 +66,17 @@ export class CarritoDrawerComponent implements OnInit {
     }).format(v || 0);
   }
 
+  irAlCheckout(): void {
+    const usuario = this.authService.getUsuario();
+    if (!usuario) {
+      this.cerrar();
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.cerrar();
+    this.router.navigate(['/checkout']);
+  }
+
   solicitar(): void {
     const usuario = this.authService.getUsuario();
     if (!usuario) {

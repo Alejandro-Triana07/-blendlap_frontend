@@ -1,11 +1,39 @@
 <div class="registro">
 
-  <!-- Panel izquierdo -->
+  <!-- ══════════════════════════════════════════════════════════
+       PANEL IZQUIERDO
+  ══════════════════════════════════════════════════════════════ -->
   <div class="registro__panel">
     <div class="registro__panel-content">
       <img src="/assets/images/navbar/logo.png" alt="Blendlap" class="registro__logo">
       <h2>Únete a Blendlap</h2>
-      <p>Crea tu cuenta y empieza a disfrutar de la mejor experiencia en barbería</p>
+      <p>Crea tu cuenta y disfruta de la mejor experiencia en barbería</p>
+
+      <!-- Indicador de pasos (panel izquierdo) -->
+      <div class="panel-steps">
+        <div class="panel-step" [class.active]="paso === 1" [class.done]="paso > 1">
+          <div class="panel-step__circle">
+            <i class="fas fa-user-edit" *ngIf="paso <= 1"></i>
+            <i class="fas fa-check" *ngIf="paso > 1"></i>
+          </div>
+          <div class="panel-step__info">
+            <span class="panel-step__num">Paso 1</span>
+            <span class="panel-step__label">Tus datos</span>
+          </div>
+        </div>
+
+        <div class="panel-step__line" [class.done]="paso > 1"></div>
+
+        <div class="panel-step" [class.active]="paso === 2">
+          <div class="panel-step__circle">
+            <i class="fas fa-envelope-open-text"></i>
+          </div>
+          <div class="panel-step__info">
+            <span class="panel-step__num">Paso 2</span>
+            <span class="panel-step__label">Verificación</span>
+          </div>
+        </div>
+      </div>
 
       <div class="registro__beneficios">
         <div class="beneficio">
@@ -21,115 +49,246 @@
           <span>Descuento en corte #11</span>
         </div>
         <div class="beneficio">
-          <i class="fas fa-bell"></i>
-          <span>Recordatorios de citas</span>
+          <i class="fas fa-shield-alt"></i>
+          <span>Cuenta verificada y segura</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Panel derecho -->
+  <!-- ══════════════════════════════════════════════════════════
+       PANEL DERECHO
+  ══════════════════════════════════════════════════════════════ -->
   <div class="registro__form-panel">
     <div class="registro__form-container">
 
-      <a routerLink="/" class="registro__back">
-        <i class="fas fa-arrow-left"></i> Volver al inicio
-      </a>
+      <!-- ────────────────────────────────────────────────────
+           PASO 1 — Formulario
+      ──────────────────────────────────────────────────────── -->
+      <ng-container *ngIf="paso === 1">
 
-      <h1>Crear cuenta</h1>
-      <p class="registro__subtitle">Completa tus datos para registrarte</p>
+        <a routerLink="/" class="reg-back">
+          <i class="fas fa-arrow-left"></i> Volver al inicio
+        </a>
 
-      <!-- Error -->
-      <div class="registro__error" *ngIf="error">
-        <i class="fas fa-exclamation-circle"></i>
-        {{ error }}
-      </div>
-
-      <div class="registro__form">
-
-        <!-- Nombre y apellido -->
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nombre</label>
-            <div class="input-wrapper">
-              <i class="fas fa-user"></i>
-              <input type="text" [(ngModel)]="nombre" placeholder="Tu nombre">
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Apellido</label>
-            <div class="input-wrapper">
-              <i class="fas fa-user"></i>
-              <input type="text" [(ngModel)]="apellido" placeholder="Tu apellido">
-            </div>
-          </div>
+        <!-- Barra de progreso -->
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" style="width: 50%"></div>
         </div>
+        <p class="progress-label">Paso 1 de 2 — Completa tus datos</p>
 
-        <!-- Correo -->
-        <div class="form-group">
-          <label>Correo electrónico</label>
-          <div class="input-wrapper">
-            <i class="fas fa-envelope"></i>
-            <input type="email" [(ngModel)]="correo_electronico" placeholder="correo@ejemplo.com" autocomplete="off">
-          </div>
-        </div>
-
-        <!-- Teléfono -->
-        <div class="form-group">
-          <label>Teléfono <span class="opcional">(opcional)</span></label>
-          <div class="input-wrapper">
-            <i class="fas fa-phone"></i>
-            <input type="tel" [(ngModel)]="telefono" placeholder="+57 300 000 0000" autocomplete="off">
-          </div>
-        </div>
-
-        <!-- Contraseña -->
-        <div class="form-group">
-          <label>Contraseña</label>
-          <div class="input-wrapper">
-
-            <i class="fas fa-lock"></i>
-
-            <input [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="contrasena" name="contrasena"
-              placeholder="Mínimo 8 caracteres" autocomplete="new-password">
-
-            <span class="input-toggle" (click)="togglePassword()">
-              <i [class]="mostrarPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-            </span>
-
-          </div>
-        </div>
-
-        <!-- Confirmar contraseña -->
-        <div class="form-group">
-          <label>Confirmar contraseña</label>
-          <div class="input-wrapper">
-
-            <i class="fas fa-lock"></i>
-
-            <input [type]="mostrarConfirmar ? 'text' : 'password'" [(ngModel)]="confirmarContrasena"
-              name="confirmarContrasena" placeholder="Repite tu contraseña" autocomplete="new-password">
-
-            <span class="input-toggle" (click)="toggleConfirmar()">
-              <i [class]="mostrarConfirmar ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-            </span>
-
-          </div>
-        </div>
-
-        <button class="registro__btn" (click)="registro()" [disabled]="cargando">
-          <span *ngIf="!cargando">Crear cuenta</span>
-          <span *ngIf="cargando">
-            <i class="fas fa-spinner fa-spin"></i> Registrando...
-          </span>
-        </button>
-
-        <p class="registro__login">
-          ¿Ya tienes cuenta?
-          <a routerLink="/login">Inicia sesión aquí</a>
+        <h1 class="reg-title">Crear cuenta</h1>
+        <p class="reg-subtitle">
+          Completa el formulario y te enviaremos un código de verificación a tu correo.
         </p>
 
-      </div>
+        <!-- Error -->
+        <div class="reg-error" *ngIf="error">
+          <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
+
+        <div class="reg-form">
+
+          <!-- Nombre y Apellido -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nombre</label>
+              <div class="input-wrapper">
+                <i class="fas fa-user"></i>
+                <input type="text" [(ngModel)]="nombre" placeholder="Tu nombre">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Apellido</label>
+              <div class="input-wrapper">
+                <i class="fas fa-user"></i>
+                <input type="text" [(ngModel)]="apellido" placeholder="Tu apellido">
+              </div>
+            </div>
+          </div>
+
+          <!-- Correo -->
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <div class="input-wrapper">
+              <i class="fas fa-envelope"></i>
+              <input type="email" [(ngModel)]="correo_electronico"
+                     placeholder="correo@ejemplo.com" autocomplete="off">
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="form-group">
+            <label class="form-label">
+              Teléfono <span class="opcional">(opcional)</span>
+            </label>
+            <div class="input-wrapper">
+              <i class="fas fa-phone"></i>
+              <input type="tel" [(ngModel)]="telefono"
+                     placeholder="+57 300 000 0000" autocomplete="off">
+            </div>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock"></i>
+              <input [type]="mostrarPassword ? 'text' : 'password'"
+                     [(ngModel)]="contrasena" name="contrasena"
+                     placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+            </div>
+            <label class="mostrar-password">
+              <input type="checkbox" [(ngModel)]="mostrarPassword" name="mostrarPassword">
+              Mostrar contraseña
+            </label>
+            <!-- Indicador de fortaleza -->
+            <div class="strength-bar" *ngIf="contrasena.length > 0">
+              <div class="strength-bar__track">
+                <div class="strength-bar__fill" [class]="getStrengthClass()"></div>
+              </div>
+              <div class="strength-hints">
+                <span [class.ok]="tieneLength()">
+                  <i class="fas fa-check-circle"></i> 8+ chars
+                </span>
+                <span [class.ok]="tieneMayuscula()">
+                  <i class="fas fa-check-circle"></i> Mayúscula
+                </span>
+                <span [class.ok]="tieneNumero()">
+                  <i class="fas fa-check-circle"></i> Número
+                </span>
+                <span [class.ok]="tieneEspecial()">
+                  <i class="fas fa-check-circle"></i> Especial
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Confirmar contraseña -->
+          <div class="form-group">
+            <label class="form-label">Confirmar contraseña</label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock"></i>
+              <input [type]="mostrarConfirmar ? 'text' : 'password'"
+                     [(ngModel)]="confirmarContrasena" name="confirmarContrasena"
+                     placeholder="Repite tu contraseña" autocomplete="new-password">
+            </div>
+            <label class="mostrar-password">
+              <input type="checkbox" [(ngModel)]="mostrarConfirmar" name="mostrarConfirmar">
+              Mostrar contraseña
+            </label>
+          </div>
+
+          <!-- Botón -->
+          <button class="reg-btn" (click)="registro()" [disabled]="cargando">
+            <ng-container *ngIf="!cargando">
+              <i class="fas fa-paper-plane"></i>
+              Enviar código de verificación
+              <i class="fas fa-arrow-right reg-btn__arrow"></i>
+            </ng-container>
+            <ng-container *ngIf="cargando">
+              <i class="fas fa-spinner fa-spin"></i> Enviando código...
+            </ng-container>
+          </button>
+
+          <p class="reg-login-link">
+            ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión aquí</a>
+          </p>
+
+        </div>
+      </ng-container>
+
+      <!-- ────────────────────────────────────────────────────
+           PASO 2 — Verificación de correo
+      ──────────────────────────────────────────────────────── -->
+      <ng-container *ngIf="paso === 2">
+
+        <button class="reg-back" (click)="reenviarCodigo()">
+          <i class="fas fa-arrow-left"></i> Cambiar datos
+        </button>
+
+        <!-- Barra de progreso -->
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" style="width: 100%"></div>
+        </div>
+        <p class="progress-label">Paso 2 de 2 — Verifica tu correo</p>
+
+        <!-- Icono principal -->
+        <div class="verify-icon-wrap">
+          <div class="verify-icon">
+            <i class="fas fa-envelope-open-text"></i>
+          </div>
+          <div class="verify-icon__ring"></div>
+        </div>
+
+        <h1 class="reg-title">Revisa tu correo</h1>
+        <p class="reg-subtitle">
+          Enviamos un código de <strong>4 dígitos</strong> a tu dirección de correo.
+          Revisa también la carpeta de spam.
+        </p>
+
+        <!-- Chip del correo -->
+        <div class="email-chip">
+          <i class="fas fa-envelope"></i>
+          <span>{{ correo_electronico }}</span>
+        </div>
+
+        <!-- Error -->
+        <div class="reg-error" *ngIf="error">
+          <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
+
+        <!-- Inputs del código (4 dígitos) -->
+        <div class="codigo-wrap">
+          <input
+            *ngFor="let d of codigoDigitos; let i = index; trackBy: trackByIndex"
+            type="text"
+            inputmode="numeric"
+            maxlength="1"
+            [id]="'rdig-' + i"
+            [(ngModel)]="codigoDigitos[i]"
+            (ngModelChange)="onDigitChange($event, i)"
+            (keydown)="onDigitKeydown($event, i)"
+            (paste)="i === 0 ? onPaste($event) : null"
+            class="codigo-input"
+            [class.filled]="codigoDigitos[i]"
+            autocomplete="off"
+            placeholder="·">
+        </div>
+
+        <!-- Expiry -->
+        <div class="expiry-notice">
+          <i class="fas fa-clock"></i>
+          <span>El código expira en <strong>15 minutos</strong></span>
+        </div>
+
+        <!-- Botón verificar -->
+        <button class="reg-btn reg-btn--verify"
+                (click)="verificarCodigo()"
+                [disabled]="cargando || codigoCompleto.length < 4">
+          <ng-container *ngIf="!cargando">
+            <i class="fas fa-check-circle"></i>
+            Verificar y crear cuenta
+          </ng-container>
+          <ng-container *ngIf="cargando">
+            <i class="fas fa-spinner fa-spin"></i> Verificando...
+          </ng-container>
+        </button>
+
+        <!-- Reenviar -->
+        <button class="resend-btn" (click)="reenviarCodigo()">
+          ¿No recibiste el código?
+          <span>Volver a enviar</span>
+        </button>
+
+        <!-- Seguridad note -->
+        <div class="security-note">
+          <i class="fas fa-shield-alt"></i>
+          <span>Tu correo es verificado para proteger tu cuenta</span>
+        </div>
+
+      </ng-container>
+
     </div>
   </div>
 

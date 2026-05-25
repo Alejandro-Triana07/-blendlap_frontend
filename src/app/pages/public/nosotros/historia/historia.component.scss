@@ -1,18 +1,13 @@
-$primary:  #1a1a1a;
-$accent:   #FBC447;
-$white:    #ffffff;
-$bg:       #f8f9fa;
-
 .historia-page {
   min-height: 100vh;
-  background: $bg;
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-gray-light);
 }
 
 .historia-hero {
-  min-height: 520px;
+  min-height: 350px;
   position: relative;
-  background: url('../../../../../assets/images/galeria/Galeria10.jpg') center/cover no-repeat;
+  background: url('https://res.cloudinary.com/dec5ya9i9/image/upload/v1779733727/DSC00845_np3h6x.jpg') center 35% / cover no-repeat;
+  background-attachment: scroll;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,7 +28,8 @@ $bg:       #f8f9fa;
   &__pre {
     display: block;
     margin-bottom: 0.9rem;
-    color: $accent;
+    color: var(--color-accent);
+    font-family: var(--font-secondary);
     font-size: 0.78rem;
     font-weight: 800;
     letter-spacing: 2.5px;
@@ -42,7 +38,8 @@ $bg:       #f8f9fa;
 
   h1 {
     margin: 0 0 0.75rem;
-    color: $white;
+    color: var(--color-white);
+    font-family: var(--font-primary);
     font-size: clamp(2.4rem, 5vw, 3.6rem);
     font-weight: 800;
     line-height: 1.05;
@@ -52,6 +49,7 @@ $bg:       #f8f9fa;
     max-width: 540px;
     margin: 0 auto;
     color: rgba(255,255,255,0.68);
+    font-family: var(--font-secondary);
     font-size: 0.96rem;
     line-height: 1.7;
   }
@@ -67,31 +65,31 @@ $bg:       #f8f9fa;
   gap: 0.55rem;
   padding: 0.75rem 1rem;
   border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   background: rgba(0,0,0,0.55);
-  color: $white;
+  color: var(--color-white);
+  font-family: var(--font-secondary);
   font-size: 0.85rem;
   font-weight: 800;
   text-decoration: none;
   backdrop-filter: blur(10px);
-  transition: all 0.2s ease;
+  transition: var(--transition);
 
   i {
-    color: $accent;
+    color: var(--color-accent);
     font-size: 0.85rem;
   }
 
   &:hover {
-    background: $accent;
-    color: $primary;
+    background: var(--color-accent);
+    color: var(--color-primary);
     transform: translateX(-2px);
-
-    i { color: $primary; }
+    i { color: var(--color-primary); }
   }
 }
 
 .historia-intro {
-  background: $primary;
+  background: var(--color-primary);
   padding: 3.4rem 0;
 
   &__texto {
@@ -102,7 +100,8 @@ $bg:       #f8f9fa;
 
     h2 {
       margin: 0 0 0.85rem;
-      color: $white;
+      color: var(--color-white);
+      font-family: var(--font-primary);
       font-size: clamp(1.35rem, 2.4vw, 1.9rem);
       font-weight: 800;
       line-height: 1.25;
@@ -112,6 +111,7 @@ $bg:       #f8f9fa;
       max-width: 650px;
       margin: 0 auto;
       color: rgba(255,255,255,0.68);
+      font-family: var(--font-secondary);
       font-size: 0.94rem;
       line-height: 1.72;
     }
@@ -120,7 +120,8 @@ $bg:       #f8f9fa;
   &__pre {
     display: block;
     margin-bottom: 0.8rem;
-    color: $accent;
+    color: var(--color-accent);
+    font-family: var(--font-secondary);
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 2px;
@@ -137,8 +138,9 @@ $bg:       #f8f9fa;
     span {
       padding: 0.5rem 0.9rem;
       border: 1px solid rgba(251,196,71,0.35);
-      border-radius: 8px;
-      color: $accent;
+      border-radius: var(--border-radius);
+      color: var(--color-accent);
+      font-family: var(--font-secondary);
       font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 1px;
@@ -154,7 +156,8 @@ $bg:       #f8f9fa;
   span {
     display: block;
     margin-bottom: 0.65rem;
-    color: $accent;
+    color: var(--color-accent);
+    font-family: var(--font-secondary);
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 2px;
@@ -163,15 +166,14 @@ $bg:       #f8f9fa;
 
   h2 {
     margin: 0;
-    color: $primary;
+    color: var(--color-primary);
+    font-family: var(--font-primary);
     font-size: clamp(1.45rem, 3vw, 2.15rem);
     font-weight: 800;
     line-height: 1.2;
   }
 
-  &--light h2 {
-    color: $white;
-  }
+  &--light h2 { color: var(--color-white); }
 }
 
 .historia-timeline {
@@ -181,9 +183,7 @@ $bg:       #f8f9fa;
   gap: 0;
 }
 
-#historia {
-  padding-top: 4.5rem;
-}
+#historia { padding-top: 4.5rem; }
 
 .historia-momento {
   display: grid;
@@ -195,34 +195,30 @@ $bg:       #f8f9fa;
 
   &--invertido {
     .historia-momento__contenido { order: 1; text-align: right; }
-    .historia-momento__linea { order: 2; }
-    .historia-momento__imagen { order: 3; }
+    .historia-momento__linea    { order: 2; }
+    .historia-momento__imagen   { order: 3; }
   }
 
   &__imagen {
     height: 340px;
     position: relative;
     overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    img { width: 100%; height: 100%; object-fit: cover; }
 
     &--izq { margin-right: 2rem; }
     &--der { margin-left: 2rem; }
 
     &-tag {
       position: absolute;
-      bottom: 16px;
-      left: 16px;
+      bottom: 16px; left: 16px;
       padding: 4px 12px;
       border-radius: 20px;
-      background: $accent;
-      color: $primary;
+      background: var(--color-accent);
+      color: var(--color-primary);
+      font-family: var(--font-secondary);
       font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 1px;
@@ -237,25 +233,21 @@ $bg:       #f8f9fa;
   }
 
   &__punto {
-    width: 52px;
-    height: 52px;
+    width: 52px; height: 52px;
     border-radius: 50%;
-    background: $primary;
-    border: 3px solid $accent;
+    background: var(--color-primary);
+    border: 3px solid var(--color-accent);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
     z-index: 1;
 
-    i {
-      color: $accent;
-      font-size: 1rem;
-    }
+    i { color: var(--color-accent); font-size: 1rem; }
 
     &--final {
-      background: $accent;
-      i { color: $primary; }
+      background: var(--color-accent);
+      i { color: var(--color-primary); }
     }
   }
 
@@ -264,7 +256,7 @@ $bg:       #f8f9fa;
     flex: 1;
     min-height: 260px;
     margin-top: 8px;
-    background: linear-gradient(180deg, $accent, rgba(251,196,71,0.1));
+    background: linear-gradient(180deg, var(--color-accent), rgba(251,196,71,0.08));
   }
 
   &__contenido {
@@ -272,21 +264,24 @@ $bg:       #f8f9fa;
 
     h2 {
       margin: 0.25rem 0 1rem;
-      color: $primary;
+      color: var(--color-primary);
+      font-family: var(--font-primary);
       font-size: 2rem;
       font-weight: 800;
     }
 
     p {
       margin: 0 0 1rem;
-      color: #555;
+      color: var(--color-gray-dark);
+      font-family: var(--font-secondary);
       font-size: 0.9rem;
       line-height: 1.8;
     }
   }
 
   &__etapa {
-    color: $accent;
+    color: var(--color-accent);
+    font-family: var(--font-secondary);
     font-size: 0.7rem;
     font-weight: 800;
     letter-spacing: 2px;
@@ -300,22 +295,21 @@ $bg:       #f8f9fa;
     margin-top: 0.5rem;
     padding: 0.6rem 1rem;
     border: 1px solid rgba(251,196,71,0.3);
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     background: rgba(251,196,71,0.1);
-    color: $primary;
+    color: var(--color-primary);
+    font-family: var(--font-secondary);
     font-size: 0.82rem;
     font-weight: 600;
 
-    i {
-      color: $accent;
-      font-size: 0.85rem;
-    }
+    i { color: var(--color-accent); font-size: 0.85rem; }
   }
 }
 
+// ─── Misión / Visión band ────────────────────────────────────
 .mv-band {
   padding: 4.5rem 0;
-  background: $primary;
+  background: var(--color-primary);
 }
 
 .mv-grid {
@@ -327,22 +321,16 @@ $bg:       #f8f9fa;
 .mv-card {
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   background: rgba(255,255,255,0.04);
 
-  img {
-    width: 100%;
-    height: 230px;
-    display: block;
-    object-fit: cover;
-  }
+  img { width: 100%; height: 230px; display: block; object-fit: cover; }
 
-  div {
-    padding: 1.5rem;
-  }
+  div { padding: 1.5rem; }
 
   span {
-    color: $accent;
+    color: var(--color-accent);
+    font-family: var(--font-secondary);
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 2px;
@@ -351,7 +339,8 @@ $bg:       #f8f9fa;
 
   h3 {
     margin: 0.55rem 0 0.85rem;
-    color: $white;
+    color: var(--color-white);
+    font-family: var(--font-primary);
     font-size: 1.35rem;
     line-height: 1.22;
   }
@@ -359,14 +348,14 @@ $bg:       #f8f9fa;
   p {
     margin: 0;
     color: rgba(255,255,255,0.64);
+    font-family: var(--font-secondary);
     font-size: 0.92rem;
     line-height: 1.7;
   }
 }
 
-.valores-section {
-  padding: 4.5rem 0;
-}
+// ─── Valores ─────────────────────────────────────────────────
+.valores-section { padding: 4.5rem 0; }
 
 .valores-grid {
   display: grid;
@@ -377,41 +366,44 @@ $bg:       #f8f9fa;
 .valor-card {
   min-height: 190px;
   padding: 1.4rem;
-  border: 1px solid #ececec;
-  border-radius: 8px;
-  background: $white;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: var(--border-radius);
+  background: var(--color-white);
+  box-shadow: var(--shadow-soft);
+  transition: var(--transition);
+
+  &:hover { transform: translateY(-4px); box-shadow: var(--shadow-strong); }
 
   i {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     margin-bottom: 0.9rem;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     background: rgba(251,196,71,0.14);
-    color: $accent;
+    color: var(--color-accent);
     font-size: 1rem;
   }
 
   h3 {
     margin: 0 0 0.65rem;
-    color: $primary;
+    color: var(--color-primary);
+    font-family: var(--font-primary);
     font-size: 1.08rem;
   }
 
   p {
     margin: 0;
-    color: #555;
+    color: var(--color-gray-dark);
+    font-family: var(--font-secondary);
     font-size: 0.88rem;
     line-height: 1.62;
   }
 }
 
-.trabaja-section {
-  padding: 0 0 4.5rem;
-}
+// ─── Trabaja con nosotros ────────────────────────────────────
+.trabaja-section { padding: 0 0 4.5rem; }
 
 .trabaja-panel {
   display: flex;
@@ -419,11 +411,12 @@ $bg:       #f8f9fa;
   justify-content: space-between;
   gap: 1.5rem;
   padding: 1.6rem;
-  border-radius: 8px;
-  background: $primary;
+  border-radius: var(--border-radius);
+  background: var(--color-primary);
 
   span {
-    color: $accent;
+    color: var(--color-accent);
+    font-family: var(--font-secondary);
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 2px;
@@ -433,7 +426,8 @@ $bg:       #f8f9fa;
   h2 {
     max-width: 680px;
     margin: 0.5rem 0 0.7rem;
-    color: $white;
+    color: var(--color-white);
+    font-family: var(--font-primary);
     font-size: clamp(1.3rem, 2.5vw, 1.85rem);
     line-height: 1.22;
   }
@@ -442,6 +436,7 @@ $bg:       #f8f9fa;
     max-width: 620px;
     margin: 0;
     color: rgba(255,255,255,0.64);
+    font-family: var(--font-secondary);
     font-size: 0.92rem;
     line-height: 1.65;
   }
@@ -454,40 +449,36 @@ $bg:       #f8f9fa;
   gap: 0.55rem;
   min-width: 200px;
   padding: 0.9rem 1.1rem;
-  border-radius: 8px;
-  background: $accent;
-  color: $primary;
+  border-radius: var(--border-radius);
+  background: var(--color-accent);
+  color: var(--color-primary);
+  font-family: var(--font-secondary);
   font-size: 0.9rem;
   font-weight: 800;
   text-decoration: none;
+  transition: var(--transition);
+
+  &:hover {
+    background: var(--color-accent-soft);
+    transform: translateY(-2px);
+  }
 }
 
+// ─── Responsive ──────────────────────────────────────────────
 @media (max-width: 992px) {
-  .valores-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .valores-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
-  .historia-hero {
-    min-height: 430px;
-  }
+  .historia-hero { min-height: 430px; }
 
-  .historia-back {
-    top: 1rem;
-    left: 1rem;
-    padding: 0.65rem 0.85rem;
-  }
+  .historia-back { top: 1rem; left: 1rem; padding: 0.65rem 0.85rem; }
 
   #historia,
   .mv-band,
-  .valores-section {
-    padding-top: 3rem;
-  }
+  .valores-section { padding-top: 3rem; }
 
-  .historia-timeline {
-    padding-bottom: 3rem;
-  }
+  .historia-timeline { padding-bottom: 3rem; }
 
   .historia-momento {
     grid-template-columns: 1fr;
@@ -498,43 +489,23 @@ $bg:       #f8f9fa;
       &--izq, &--der { margin: 0; }
     }
 
-    &__linea {
-      flex-direction: row;
-      padding: 0;
-    }
+    &__linea { flex-direction: row; padding: 0; }
+    &__linea-vertical { display: none; }
+    &__punto { width: 40px; height: 40px; }
 
-    &__linea-vertical {
-      display: none;
-    }
-
-    &__punto {
-      width: 40px;
-      height: 40px;
-    }
-
-    &__contenido {
-      padding: 0;
-      text-align: left !important;
-    }
+    &__contenido { padding: 0; text-align: left !important; }
 
     &--invertido {
       .historia-momento__contenido { order: 3; }
-      .historia-momento__linea { order: 1; }
-      .historia-momento__imagen { order: 2; }
+      .historia-momento__linea    { order: 1; }
+      .historia-momento__imagen   { order: 2; }
     }
   }
 
   .mv-grid,
-  .valores-grid {
-    grid-template-columns: 1fr;
-  }
+  .valores-grid { grid-template-columns: 1fr; }
 
-  .trabaja-panel {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+  .trabaja-panel { align-items: flex-start; flex-direction: column; }
 
-  .trabaja-btn {
-    width: 100%;
-  }
+  .trabaja-btn { width: 100%; }
 }

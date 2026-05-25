@@ -1,7 +1,7 @@
 <div class="page-header">
   <div>
     <h1 class="page-title">Clientes</h1>
-    <p class="page-sub">Gestion y seguimiento de clientes</p>
+    <p class="page-sub">Gestión y seguimiento de clientes</p>
   </div>
 </div>
 
@@ -24,7 +24,7 @@
   <div class="kpi-card">
     <div class="kpi-card__icon kpi-card__icon--accent"><i class="fas fa-gift"></i></div>
     <div>
-      <div class="kpi-card__label">Proximo descuento</div>
+      <div class="kpi-card__label">Próximo descuento</div>
       <div class="kpi-card__valor">{{ clientesConDescuento }}</div>
       <div class="kpi-card__sub">clientes</div>
     </div>
@@ -37,7 +37,7 @@
     <i class="fas fa-search"></i>
     <input type="text" [(ngModel)]="busqueda"
       (input)="buscar()"
-      placeholder="Buscar por nombre, correo o telefono...">
+      placeholder="Buscar por nombre, correo o teléfono...">
     <button class="search-bar__clear" *ngIf="busqueda" (click)="limpiarBusqueda()">
       <i class="fas fa-times"></i>
     </button>
@@ -105,7 +105,7 @@
             }">
               <i class="fas fa-gift" *ngIf="c.cortes_para_descuento === 1"></i>
               <i class="fas fa-scissors" *ngIf="c.cortes_para_descuento > 1"></i>
-              {{ c.cortes_para_descuento === 1 ? 'Proximo!' : c.cortes_para_descuento + ' cortes' }}
+              {{ c.cortes_para_descuento === 1 ? '¡Próximo!' : c.cortes_para_descuento + ' cortes' }}
             </div>
           </td>
           <td class="fecha-col">{{ formatFecha(c.fecha_creacion) }}</td>
@@ -203,7 +203,7 @@
 
       <div class="empty-state" *ngIf="historial.reservas?.length === 0 && historial.presenciales?.length === 0">
         <i class="fas fa-history"></i>
-        <p>Sin historial aun</p>
+        <p>Sin historial aún</p>
       </div>
 
     </div>

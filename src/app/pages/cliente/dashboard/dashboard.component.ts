@@ -3,6 +3,7 @@ import { ReservaService, IReserva } from '../../../core/services/reserva.service
 import { ResenaService, IResena } from '../../../core/services/resena.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { CreditoService, ICredito } from '../../../core/services/credito.service';
+import { PagoService, ICompra } from '../../../core/services/pago.service';
 import { Router } from '@angular/router';
 import { TabService } from '../../../core/services/tab.service';
 
@@ -17,7 +18,7 @@ export class DashboardComponent implements OnInit {
   cargando = false;
   error = '';
   usuario: any = null;
-  tabActual: 'actuales' | 'historial' | 'creditos' = 'actuales';
+  tabActual: 'actuales' | 'historial' | 'creditos' | 'compras' = 'actuales';
   reservaExpandida: number | null = null;
 
   // Modal resena
@@ -44,14 +45,17 @@ export class DashboardComponent implements OnInit {
   editarHoy: Date = new Date();
   horarioBarberia: any[] = [];
 
+  compras: ICompra[] = [];
+  cargandoCompras = false;
+
   constructor(
     private reservaService: ReservaService,
     private resenaService: ResenaService,
     private authService: AuthService,
     private creditoService: CreditoService,
+    private pagoService: PagoService,
     private tabService: TabService,
     private router: Router,
-
   ) { }
 
   ngOnInit(): void {
@@ -59,17 +63,32 @@ export class DashboardComponent implements OnInit {
     this.cargarReservas();
     this.cargarHorarioBarberia();
     this.cargarCreditos();
+    this.cargarCompras();
     this.tabService.tab$.subscribe(tab => {
-      this.tabActual = tab as 'actuales' | 'historial' | 'creditos';
+      this.tabActual = tab as 'actuales' | 'historial' | 'creditos' | 'compras';
+      this.reservaExpandida = null;
+      this.autoExpandirPrimero();
     });
   }
 
   cargarReservas(): void {
     this.cargando = true;
     this.reservaService.getMisReservas().subscribe({
-      next: (res) => { this.reservas = res.data; this.cargando = false; },
+      next: (res) => {
+        this.reservas = res.data;
+        this.cargando = false;
+        this.autoExpandirPrimero();
+      },
       error: () => { this.error = 'Error al cargar tus reservas'; this.cargando = false; }
     });
+  }
+
+  private autoExpandirPrimero(): void {
+    if (this.tabActual === 'actuales' && this.reservasPendientes.length > 0) {
+      this.reservaExpandida = this.reservasPendientes[0].id_reserva;
+    } else if (this.tabActual === 'historial' && this.reservasHistorial.length > 0) {
+      this.reservaExpandida = this.reservasHistorial[0].id_reserva;
+    }
   }
   /* ver estado de solicitud de credito */
   creditos: ICredito[] = [];
@@ -80,6 +99,20 @@ export class DashboardComponent implements OnInit {
     this.creditoService.getMisCreditos().subscribe({
       next: (res) => { this.creditos = res.data; this.cargandoCreditos = false; },
       error: () => { this.cargandoCreditos = false; }
+    });
+  }
+
+  cargarCompras(): void {
+    this.cargandoCompras = true;
+    this.pagoService.getMisCompras().subscribe({
+      next: (res) => {
+        this.compras = res.data.map(c => ({
+          ...c,
+          items: typeof c.items === 'string' ? JSON.parse(c.items) : c.items
+        }));
+        this.cargandoCompras = false;
+      },
+      error: () => { this.cargandoCompras = false; }
     });
   }
 

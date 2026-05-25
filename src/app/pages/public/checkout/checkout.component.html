@@ -1,0 +1,254 @@
+<div class="checkout">
+
+  <!-- Header -->
+  <div class="checkout-header">
+    <button class="checkout-back" (click)="volverAlCarrito()">
+      <i class="fas fa-arrow-left"></i> Volver
+    </button>
+    <div class="checkout-logo">
+      <img src="/assets/images/navbar/logo.png" alt="Blendlap">
+      <span>Checkout seguro</span>
+    </div>
+    <div class="checkout-secure">
+      <i class="fas fa-lock"></i> SSL cifrado
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="checkout-body">
+
+    <!-- Columna izquierda: Resumen del pedido -->
+    <div class="checkout-resumen">
+      <div class="resumen-card">
+        <h2 class="resumen-title">
+          <i class="fas fa-shopping-bag"></i>
+          Resumen del pedido
+        </h2>
+
+        <div class="resumen-items">
+          <div class="resumen-item" *ngFor="let item of items">
+            <div class="resumen-item__img-wrap">
+              <img
+                [src]="'http://localhost:3001/images/productos/' + item.producto.imagen"
+                [alt]="item.producto.nombre_producto"
+                onerror="this.src='/assets/images/placeholder.png'">
+              <span class="resumen-item__qty">{{ item.cantidad }}</span>
+            </div>
+            <div class="resumen-item__info">
+              <p class="resumen-item__name">{{ item.producto.nombre_producto }}</p>
+              <p class="resumen-item__meta">
+                <span *ngIf="item.talla" class="badge-talla">
+                  <i class="fas fa-ruler-horizontal"></i> {{ item.talla }}
+                </span>
+                <span class="badge-cat">{{ item.producto.categoria }}</span>
+              </p>
+            </div>
+            <div class="resumen-item__precio">
+              {{ formatCOP(+item.producto.precio * item.cantidad) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="resumen-divider"></div>
+
+        <div class="resumen-totales">
+          <div class="resumen-row">
+            <span>Subtotal</span>
+            <span>{{ formatCOP(total) }}</span>
+          </div>
+          <div class="resumen-row">
+            <span>Envío</span>
+            <span class="text-green">Recoge en tienda</span>
+          </div>
+          <div class="resumen-divider"></div>
+          <div class="resumen-row resumen-total">
+            <span>Total</span>
+            <strong>{{ formatCOP(total) }}</strong>
+          </div>
+        </div>
+
+        <!-- Badge seguridad -->
+        <div class="resumen-seguridad">
+          <i class="fas fa-shield-alt"></i>
+          <p>Tu compra está protegida con cifrado SSL y procesada de forma segura por Wompi.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha: Pago -->
+    <div class="checkout-pago">
+
+      <!-- Card principal de pago -->
+      <div class="pago-card">
+        <div class="pago-card__header">
+          <div class="pago-card__icon">
+            <i class="fas fa-credit-card"></i>
+          </div>
+          <div>
+            <h2>Pago en línea</h2>
+            <p>Procesado por <strong>Wompi</strong></p>
+          </div>
+          <div class="wompi-badge">
+            <i class="fas fa-check-circle"></i> Seguro
+          </div>
+        </div>
+
+        <!-- Métodos aceptados -->
+        <div class="metodos-wrap">
+          <p class="metodos-label">Métodos aceptados</p>
+          <div class="metodos-grid">
+            <div class="metodo">
+              <i class="fab fa-cc-visa"></i>
+              <span>Visa</span>
+            </div>
+            <div class="metodo">
+              <i class="fab fa-cc-mastercard"></i>
+              <span>Mastercard</span>
+            </div>
+            <div class="metodo">
+              <i class="fas fa-university"></i>
+              <span>PSE</span>
+            </div>
+            <div class="metodo">
+              <i class="fas fa-mobile-alt"></i>
+              <span>Nequi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div class="pago-error" *ngIf="error">
+          <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
+
+        <!-- Total prominente -->
+        <div class="pago-total-wrap">
+          <p class="pago-total-label">Total a pagar</p>
+          <p class="pago-total-amount">{{ formatCOP(total) }}</p>
+          <p class="pago-total-sub">Pago en COP · procesado por Wompi</p>
+        </div>
+
+        <!-- Botón principal -->
+        <button class="btn-wompi" (click)="pagarConWompi()" [disabled]="iniciando">
+          <ng-container *ngIf="!iniciando">
+            <i class="fas fa-lock"></i>
+            Pagar {{ formatCOP(total) }} con Wompi
+            <i class="fas fa-arrow-right"></i>
+          </ng-container>
+          <ng-container *ngIf="iniciando">
+            <i class="fas fa-spinner fa-spin"></i>
+            Redirigiendo a Wompi...
+          </ng-container>
+        </button>
+
+        <p class="pago-disclaimer">
+          Al continuar serás redirigido a la plataforma segura de <strong>Wompi</strong>.
+          Blendlap no almacena datos de tu tarjeta.
+        </p>
+      </div>
+
+      <!-- Card modo prueba (sandbox) -->
+      <div class="test-card">
+        <div class="test-card__header" (click)="mostrarTest = !mostrarTest">
+          <div class="test-card__badge">
+            <i class="fas fa-flask"></i> MODO PRUEBA — SANDBOX
+          </div>
+          <i class="fas" [class.fa-chevron-down]="!mostrarTest" [class.fa-chevron-up]="mostrarTest"></i>
+        </div>
+
+        <div class="test-card__body" *ngIf="mostrarTest">
+          <p class="test-intro">
+            Usa estas tarjetas de prueba en Wompi sandbox. <strong>No uses dinero real.</strong>
+          </p>
+
+          <div class="test-tarjeta">
+            <div class="test-tarjeta__header">
+              <i class="fab fa-cc-visa"></i>
+              <span>Visa — Pago aprobado</span>
+              <span class="test-badge test-badge--ok">APROBADA</span>
+            </div>
+            <div class="test-tarjeta__body">
+              <div class="test-row">
+                <span>Número</span>
+                <div class="test-copy" (click)="copiar('4242424242424242')">
+                  <code>4242 4242 4242 4242</code>
+                  <i class="fas fa-copy"></i>
+                </div>
+              </div>
+              <div class="test-row">
+                <span>CVV</span>
+                <div class="test-copy" (click)="copiar('123')">
+                  <code>123</code>
+                  <i class="fas fa-copy"></i>
+                </div>
+              </div>
+              <div class="test-row">
+                <span>Vencimiento</span>
+                <code>12/30</code>
+              </div>
+              <div class="test-row">
+                <span>Cuotas</span>
+                <code>1</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="test-tarjeta test-tarjeta--mc">
+            <div class="test-tarjeta__header">
+              <i class="fab fa-cc-mastercard"></i>
+              <span>Mastercard — Pago aprobado</span>
+              <span class="test-badge test-badge--ok">APROBADA</span>
+            </div>
+            <div class="test-tarjeta__body">
+              <div class="test-row">
+                <span>Número</span>
+                <div class="test-copy" (click)="copiar('5204730000001003')">
+                  <code>5204 7300 0000 1003</code>
+                  <i class="fas fa-copy"></i>
+                </div>
+              </div>
+              <div class="test-row">
+                <span>CVV</span>
+                <div class="test-copy" (click)="copiar('123')">
+                  <code>123</code>
+                  <i class="fas fa-copy"></i>
+                </div>
+              </div>
+              <div class="test-row">
+                <span>Vencimiento</span>
+                <code>12/30</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="test-tarjeta test-tarjeta--declined">
+            <div class="test-tarjeta__header">
+              <i class="fab fa-cc-visa"></i>
+              <span>Visa — Pago rechazado</span>
+              <span class="test-badge test-badge--err">RECHAZADA</span>
+            </div>
+            <div class="test-tarjeta__body">
+              <div class="test-row">
+                <span>Número</span>
+                <div class="test-copy" (click)="copiar('4111111111111111')">
+                  <code>4111 1111 1111 1111</code>
+                  <i class="fas fa-copy"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="test-nequi">
+            <i class="fas fa-mobile-alt"></i>
+            <div>
+              <p><strong>Nequi sandbox</strong></p>
+              <p>Número: <code (click)="copiar('3991111111')">3991111111</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

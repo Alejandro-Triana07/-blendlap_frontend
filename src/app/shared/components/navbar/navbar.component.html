@@ -20,12 +20,10 @@
 
       <!-- Links cliente en dashboard -->
       <ng-container *ngIf="usuario?.rol === 'cliente' && esDashboardCliente">
-        <li><a class="nav-link-cliente" (click)="tabCliente('actuales')"><i class="fas fa-calendar-check"></i>
-            Actuales</a></li>
-        <li><a class="nav-link-cliente" (click)="tabCliente('historial')"><i class="fas fa-history"></i> Historial</a>
-        </li>
-        <li><a class="nav-link-cliente" (click)="tabCliente('creditos')"><i class="fas fa-hand-holding-usd"></i>
-            Créditos</a></li>
+        <li><a class="nav-link-cliente" [class.nav-link-cliente--activa]="tabActualCliente === 'actuales'" (click)="tabCliente('actuales')"><i class="fas fa-calendar-check"></i> Actuales</a></li>
+        <li><a class="nav-link-cliente" [class.nav-link-cliente--activa]="tabActualCliente === 'historial'" (click)="tabCliente('historial')"><i class="fas fa-history"></i> Historial</a></li>
+        <li><a class="nav-link-cliente" [class.nav-link-cliente--activa]="tabActualCliente === 'compras'" (click)="tabCliente('compras')"><i class="fas fa-shopping-bag"></i> Compras</a></li>
+        <li><a class="nav-link-cliente" [class.nav-link-cliente--activa]="tabActualCliente === 'creditos'" (click)="tabCliente('creditos')"><i class="fas fa-hand-holding-usd"></i> Créditos</a></li>
       </ng-container>
 
       <!-- Links públicos -->

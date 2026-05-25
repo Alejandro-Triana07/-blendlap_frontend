@@ -1,0 +1,251 @@
+$gold:  #fbc447;
+$dark:  #1a1a1a;
+$white: #ffffff;
+$gray:  #6c757d;
+$green: #28a745;
+$red:   #dc3545;
+$orange: #fd7e14;
+
+.resultado {
+  min-height: 100vh;
+  background: #f4f5f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.resultado-card {
+  background: $white;
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+
+  &--ok  { border-top: 4px solid $green; }
+  &--err { border-top: 4px solid $red;   }
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: $dark;
+    margin: 1.25rem 0 0.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $gray;
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+  }
+}
+
+// ─── Iconos de estado ─────────────────────────────────────────────────────────
+.estado-icon {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto;
+  font-size: 2.2rem;
+
+  &--spin {
+    background: rgba($gold, 0.1);
+    border: 2px solid rgba($gold, 0.3);
+    color: darken($gold, 10%);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  &--ok {
+    background: rgba($green, 0.1);
+    border: 2px solid rgba($green, 0.25);
+    color: $green;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  }
+
+  &--err {
+    background: rgba($red, 0.08);
+    border: 2px solid rgba($red, 0.2);
+    color: $red;
+    animation: popIn 0.4s ease both;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba($gold, 0.3); }
+  50%       { box-shadow: 0 0 0 12px rgba($gold, 0); }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+// ─── Confetti ─────────────────────────────────────────────────────────────────
+.confetti-wrap {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 200px;
+  pointer-events: none;
+  overflow: hidden;
+
+  span {
+    position: absolute;
+    top: -10px;
+    left: calc(var(--i) * 8.5%);
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    animation: confettiFall 1.2s ease-out both;
+    animation-delay: calc(var(--i, 0) * 0.08s);
+
+    &:nth-child(odd)  { background: $gold;  transform: rotate(45deg); }
+    &:nth-child(even) { background: $dark;  border-radius: 50%; }
+    &:nth-child(3n)   { background: $green; }
+  }
+}
+
+@keyframes confettiFall {
+  from { transform: translateY(0) rotate(0); opacity: 1; }
+  to   { transform: translateY(180px) rotate(540deg); opacity: 0; }
+}
+
+// ─── Puntos de carga ──────────────────────────────────────────────────────────
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+
+  span {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: $gold;
+    animation: dotBounce 1.2s ease-in-out infinite;
+
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
+  }
+}
+
+@keyframes dotBounce {
+  0%, 100% { transform: translateY(0);    opacity: 0.4; }
+  50%       { transform: translateY(-8px); opacity: 1; }
+}
+
+// ─── Info grid ────────────────────────────────────────────────────────────────
+.resultado-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-item {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 0.8rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: $gray;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: $dark;
+  word-break: break-all;
+
+  &.text-green { color: $green; }
+
+  i { margin-right: 0.25rem; }
+}
+
+// ─── Nota ─────────────────────────────────────────────────────────────────────
+.resultado-nota {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba($green, 0.06);
+  border: 1px solid rgba($green, 0.15);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  text-align: left;
+  margin-bottom: 1.75rem;
+
+  i { color: $green; font-size: 1rem; margin-top: 2px; flex-shrink: 0; }
+
+  p {
+    font-size: 0.82rem;
+    color: $gray;
+    margin: 0;
+    line-height: 1.6;
+    strong { color: $dark; }
+  }
+
+  &--warn {
+    background: rgba($orange, 0.06);
+    border-color: rgba($orange, 0.2);
+    i { color: $orange; }
+  }
+}
+
+// ─── Acciones ─────────────────────────────────────────────────────────────────
+.resultado-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.btn-principal {
+  width: 100%;
+  padding: 0.9rem;
+  background: $dark;
+  color: $gold;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &:hover { background: lighten($dark, 8%); }
+}
+
+.btn-secundario {
+  width: 100%;
+  padding: 0.9rem;
+  background: transparent;
+  color: $dark;
+  border: 1.5px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &:hover {
+    background: $dark;
+    color: $white;
+    border-color: $dark;
+  }
+}

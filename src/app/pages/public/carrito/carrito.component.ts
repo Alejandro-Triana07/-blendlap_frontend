@@ -98,7 +98,8 @@ export class CarritoComponent implements OnInit {
     });
   }
 
-  irAlHome(): void { this.router.navigate(['/']); }
+  irAlHome(): void     { this.router.navigate(['/']); }
+  irAlCheckout(): void { this.router.navigate(['/checkout']); }
 
   formatCurrency(v: number): string {
     return new Intl.NumberFormat('es-CO', {

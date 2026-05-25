@@ -23,8 +23,8 @@
     <ng-container *ngIf="tabActual === 'actuales'">
       <div class="empty-state" *ngIf="reservasPendientes.length === 0">
         <div class="empty-state__icon"><i class="fas fa-calendar-check"></i></div>
-        <h3>No tienes citas proximas</h3>
-        <p>Agenda tu proxima cita ahora</p>
+        <h3>No tienes citas próximas</h3>
+        <p>Agenda tu próxima cita ahora</p>
         <button class="btn-nueva mt" (click)="irAReservar()">
           <i class="fas fa-plus"></i> Reservar ahora
         </button>
@@ -56,7 +56,7 @@
               <span class="detalle-fila__valor valor--precio">${{ r.precio_total | number:'1.0-0' }}</span>
             </div>
             <div class="detalle-fila" *ngIf="r.duracion_total">
-              <span class="detalle-fila__label">Duracion</span>
+              <span class="detalle-fila__label">Duración</span>
               <span class="detalle-fila__valor">{{ r.duracion_total }} min</span>
             </div>
             <div class="detalle-fila">
@@ -73,11 +73,11 @@
             </div>
             <div class="detalle-fila">
               <span class="detalle-fila__label">Lugar</span>
-              <span class="detalle-fila__valor">Blendlap Barberia</span>
+              <span class="detalle-fila__valor">Blendlap Barbería</span>
             </div>
             <div class="detalle-fila">
-              <span class="detalle-fila__label">Direccion</span>
-              <span class="detalle-fila__valor">Cl. 48 # 19-55, Armenia, Quindio</span>
+              <span class="detalle-fila__label">Dirección</span>
+              <span class="detalle-fila__valor">Cl. 48 # 19-55, Armenia, Quindío</span>
             </div>
             <div class="cita-item__acciones">
               <button class="btn-accion btn-accion--modificar" (click)="abrirModalEditar(r)">
@@ -96,8 +96,8 @@
     <ng-container *ngIf="tabActual === 'historial'">
       <div class="empty-state" *ngIf="reservasHistorial.length === 0">
         <div class="empty-state__icon"><i class="fas fa-history"></i></div>
-        <h3>Sin historial aun</h3>
-        <p>Aqui apareceran tus citas completadas y canceladas</p>
+        <h3>Sin historial aún</h3>
+        <p>Aquí aparecerán tus citas completadas y canceladas</p>
       </div>
 
       <div class="citas-list" *ngIf="reservasHistorial.length > 0">
@@ -129,7 +129,7 @@
               <span class="detalle-fila__valor valor--precio">${{ r.precio_total | number:'1.0-0' }}</span>
             </div>
             <div class="detalle-fila" *ngIf="r.duracion_total">
-              <span class="detalle-fila__label">Duracion</span>
+              <span class="detalle-fila__label">Duración</span>
               <span class="detalle-fila__valor">{{ r.duracion_total }} min</span>
             </div>
             <div class="detalle-fila">
@@ -146,15 +146,68 @@
             </div>
             <div class="cita-item__acciones" *ngIf="r.estado === 'completada'">
               <button class="btn-accion btn-accion--resena" *ngIf="puedeResenar(r)" (click)="abrirModalResena(r)">
-                <i class="fas fa-star"></i> Dejar resena
+                <i class="fas fa-star"></i> Dejar reseña
               </button>
               <span class="resena-dada" *ngIf="!puedeResenar(r) && r.tiene_resena">
-                <i class="fas fa-star"></i> Resena enviada
+                <i class="fas fa-star"></i> Reseña enviada
               </span>
             </div>
           </div>
         </div>
       </div>
+    </ng-container>
+
+    <!-- COMPRAS -->
+    <ng-container *ngIf="tabActual === 'compras'">
+
+      <div class="cargando" *ngIf="cargandoCompras">
+        <i class="fas fa-spinner fa-spin"></i> Cargando compras...
+      </div>
+
+      <div class="empty-state" *ngIf="!cargandoCompras && compras.length === 0">
+        <div class="empty-state__icon"><i class="fas fa-shopping-bag"></i></div>
+        <h3>Sin compras aún</h3>
+        <p>Aquí aparecerán tus pedidos pagados en línea</p>
+      </div>
+
+      <div class="compras-lista" *ngIf="!cargandoCompras && compras.length > 0">
+        <div class="compra-card" *ngFor="let c of compras"
+          [class.compra-card--aprobado]="c.estado === 'aprobado'"
+          [class.compra-card--rechazado]="c.estado === 'rechazado' || c.estado === 'error'"
+          [class.compra-card--pendiente]="c.estado === 'pendiente'">
+
+          <div class="compra-card__header">
+            <div class="compra-card__top">
+              <span class="compra-badge"
+                [class.compra-badge--aprobado]="c.estado === 'aprobado'"
+                [class.compra-badge--pendiente]="c.estado === 'pendiente'"
+                [class.compra-badge--rechazado]="c.estado === 'rechazado' || c.estado === 'error'">
+                <i class="fas fa-check-circle" *ngIf="c.estado === 'aprobado'"></i>
+                <i class="fas fa-clock"        *ngIf="c.estado === 'pendiente'"></i>
+                <i class="fas fa-times-circle" *ngIf="c.estado === 'rechazado' || c.estado === 'error'"></i>
+                {{ c.estado === 'aprobado' ? 'Pagado' : c.estado === 'pendiente' ? 'Pendiente' : 'Rechazado' }}
+              </span>
+              <span class="compra-fecha">{{ formatFechaCorta2(c.fecha_creacion) }}</span>
+            </div>
+            <div class="compra-total">{{ formatCurrency(c.total) }}</div>
+          </div>
+
+          <div class="compra-items">
+            <div class="compra-item" *ngFor="let item of c.items">
+              <span class="compra-item__nombre">{{ item.nombre }}<span *ngIf="item.talla"> ({{ item.talla }})</span></span>
+              <span class="compra-item__qty">x{{ item.cantidad }}</span>
+              <span class="compra-item__precio">{{ formatCurrency(item.subtotal) }}</span>
+            </div>
+          </div>
+
+          <div class="compra-ref">
+            <i class="fas fa-receipt"></i> Ref: {{ c.referencia }}
+            <span *ngIf="c.id_venta"> · Venta #{{ c.id_venta }}</span>
+          </div>
+
+        </div>
+      </div>
+
     </ng-container>
 
     <!-- CRÉDITOS -->
@@ -279,7 +332,7 @@
           <i class="fas fa-spinner fa-spin"></i> Cargando horarios...
         </div>
         <div class="edit-slots__empty" *ngIf="!editarCargandoSlots && editarSlots.length === 0">
-          <p>No hay horarios disponibles para este dia</p>
+          <p>No hay horarios disponibles para este día</p>
         </div>
         <div class="edit-slots__grid" *ngIf="!editarCargandoSlots && editarSlots.length > 0">
           <button *ngFor="let slot of editarSlots" class="edit-slot"
@@ -322,7 +375,7 @@
       <i class="fas fa-exclamation-triangle"></i>
     </div>
     <h3>Cancelar cita</h3>
-    <p>Esta seguro de cancelar tu reserva con <strong>{{ reservaACancelar?.nombre_barbero }}</strong>?</p>
+    <p>¿Estás seguro de cancelar tu reserva con <strong>{{ reservaACancelar?.nombre_barbero }}</strong>?</p>
     <div style="display:flex; gap:0.75rem; margin-top:0.5rem; width:100%;">
       <button class="btn-cancelar-modal" style="flex:1;" (click)="modalCancelar = false">
         No, mantener
@@ -330,7 +383,7 @@
       <button class="btn-accion btn-accion--cancelar" style="flex:1; border-radius:9px;"
         (click)="ejecutarCancelar()" [disabled]="cancelando">
         <i class="fas fa-spinner fa-spin" *ngIf="cancelando"></i>
-        {{ cancelando ? 'Cancelando...' : 'Si, cancelar' }}
+        {{ cancelando ? 'Cancelando...' : 'Sí, cancelar' }}
       </button>
     </div>
   </div>
@@ -344,12 +397,12 @@
     </button>
     <div class="resena-exito" *ngIf="resenaExitosa">
       <div class="resena-exito__icon"><i class="fas fa-check-circle"></i></div>
-      <h3>Gracias por tu resena!</h3>
-      <p>Tu opinion ayuda a otros clientes</p>
+      <h3>¡Gracias por tu reseña!</h3>
+      <p>Tu opinión ayuda a otros clientes</p>
     </div>
     <ng-container *ngIf="!resenaExitosa">
       <div class="modal-resena__header">
-        <h2>Como fue tu experiencia?</h2>
+        <h2>¿Cómo fue tu experiencia?</h2>
         <p>Con <strong>{{ reservaAResenar?.nombre_barbero }}</strong></p>
       </div>
       <div class="modal-resena__body">
@@ -371,7 +424,7 @@
         <div class="form-group">
           <label>Comentario (opcional)</label>
           <textarea [(ngModel)]="formularioResena.comentario" rows="4"
-            placeholder="Cuentanos como fue tu experiencia..."></textarea>
+            placeholder="Cuéntanos cómo fue tu experiencia..."></textarea>
         </div>
         <div class="alert alert--error" *ngIf="errorResena">
           <i class="fas fa-exclamation-circle"></i> {{ errorResena }}
@@ -382,7 +435,7 @@
         <button class="btn-enviar" (click)="guardarResena()" [disabled]="guardandoResena">
           <i class="fas fa-paper-plane" *ngIf="!guardandoResena"></i>
           <i class="fas fa-spinner fa-spin" *ngIf="guardandoResena"></i>
-          {{ guardandoResena ? 'Enviando...' : 'Enviar resena' }}
+          {{ guardandoResena ? 'Enviando...' : 'Enviar reseña' }}
         </button>
       </div>
     </ng-container>

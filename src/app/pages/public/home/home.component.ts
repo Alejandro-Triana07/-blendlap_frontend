@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, HostListener } from '@angular/core';
 import { ServicioService, IServicio } from '../../../core/services/servicio.service';
 import { BarberoService, IBarbero } from '../../../core/services/barbero.service';
 import { ProductoService, IProducto } from '../../../core/services/producto.service';
@@ -36,6 +36,17 @@ export class HomeComponent implements OnInit {
     this.cargarBarberos();
     this.cargarProductos();
     this.verificarProductoPendiente();
+  }
+
+  mostrarScrollTop = false;
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.mostrarScrollTop = window.scrollY > 400;
+  }
+
+  scrollAlTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   scrollTo(seccion: string): void {
@@ -280,38 +291,46 @@ export class HomeComponent implements OnInit {
   // ─── Galería ──────────────────────────────────────────────
   galeriaColumnas = [
     [
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria.jpg', alt: 'Corte clasico' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria13.jpg', alt: 'Corte moderno' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria6.jpg', alt: 'Corte infantil' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779672629/DSC00855_mpwhop.jpg', alt: 'Corte clasico' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779672522/DSC00511_f3oiaz.jpg', alt: 'Corte moderno' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779672131/DSC00226_tdcbbg.jpg', alt: 'Corte infantil' },
     ],
     [
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria5.jpg', alt: 'Estilo urbano' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671279/DSC00947_fgdy7s.jpg', alt: 'Estilo urbano' },
       { tipo: 'video', src: 'assets/images/galeria/GaleVideo1.mp4', alt: 'Corte extra' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria12.jpg', alt: 'Corte con estilo' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671277/DSC00931_daequp.jpg', alt: 'Corte con estilo' },
     ],
     [
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria2.jpg', alt: 'Arreglo de barba' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria11.jpg', alt: 'Corte con estilo' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria7.jpg', alt: 'Corte con estilo' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671152/DSC00273_exnmnd.jpg', alt: 'Arreglo de barba' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671272/DSC00510_t84yag.jpg', alt: 'Corte con estilo' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671270/DSC00502_lr67vl.jpg', alt: 'Corte con estilo' },
     ],
     [
       { tipo: 'video', src: 'assets/images/galeria/GaleVideo4.mp4', alt: 'Corte con estilo' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria9.jpg', alt: 'Corte con estilo' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria3.jpg', alt: 'Corte moderno' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671269/DSC00370_r4dmbe.jpg', alt: 'Corte con estilo' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671266/DSC00310_auit1h.jpg', alt: 'Corte moderno' },
     ],
     [
       { tipo: 'video', src: 'assets/images/galeria/GaleVideo3.mp4', alt: 'Corte extra' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria4.jpg', alt: 'Afeitado clasico' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria8.jpg', alt: 'Corte moderno' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671264/DSC00303_cyyei0.jpg', alt: 'Afeitado clasico' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671262/DSC00293_czb0qo.jpg', alt: 'Corte moderno' },
     ],
     [
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria10.jpg', alt: 'Corte con estilo' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671149/DSC00252_myn3go.jpg', alt: 'Corte con estilo' },
       { tipo: 'video', src: 'assets/images/galeria/GaleVideo5.mp4', alt: 'Corte con estilo' },
-      { tipo: 'imagen', src: 'assets/images/galeria/Galeria1.jpg', alt: 'Corte con estilo' },
+      { tipo: 'imagen', src: 'https://res.cloudinary.com/dec5ya9i9/image/upload/v1779671267/DSC00339_khznkh.jpg', alt: 'Corte con estilo' },
     ],
   ];
 
   galeriaVisible = 6;
+
+  get galeriaItemsTodos() {
+    return this.galeriaColumnas.flat();
+  }
+
+  get galeriaItemsTodosReverse() {
+    return [...this.galeriaColumnas.flat()].reverse();
+  }
 
   get hayMasGaleria(): boolean {
     if (this.esMobil()) {
