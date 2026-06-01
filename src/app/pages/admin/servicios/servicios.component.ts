@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ServicioService, IServicio } from '../../../core/services/servicio.service';
+import { resolveMediaUrl } from '../../../core/utils/image-url.util';
 
 @Component({
   selector: 'app-servicios',
@@ -63,9 +64,7 @@ export class ServiciosComponent implements OnInit {
     this.editando = !!servicio;
     this.formulario = servicio ? { ...servicio } : this.formularioVacio();
     this.archivoSeleccionado = null;
-    this.previewImagen = servicio?.imagen
-      ? `http://localhost:3001/images/servicios/${servicio.imagen}`
-      : '';
+    this.previewImagen = servicio?.imagen ? resolveMediaUrl(servicio.imagen, 'servicios') : '';
     this.modalVisible = true;
   }
 

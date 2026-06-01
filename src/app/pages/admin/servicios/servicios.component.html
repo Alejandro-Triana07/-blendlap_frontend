@@ -24,7 +24,7 @@
       <div class="servicio-card" *ngFor="let s of serviciosFiltrados">
 
         <div class="servicio-card__img">
-          <img *ngIf="s.imagen" [src]="'http://localhost:3001/images/servicios/' + s.imagen"
+          <img *ngIf="s.imagen" [src]="s.imagen | mediaUrl:'servicios'"
             [alt]="s.nombre_servicio" />
           <div *ngIf="!s.imagen" class="servicio-card__img--empty">
             <i class="fas fa-cut"></i>

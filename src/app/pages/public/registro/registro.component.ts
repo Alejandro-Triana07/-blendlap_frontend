@@ -95,7 +95,11 @@ export class RegistroComponent implements OnInit {
       },
       error: (err) => {
         this.cargando = false;
-        this.error = err.error?.mensaje || 'Error al enviar el código de verificación';
+        if (err.status === 0) {
+          this.error = 'No se pudo conectar con el servidor. Verifica que el backend esté corriendo (puerto 3000).';
+        } else {
+          this.error = err.error?.mensaje || 'Error al enviar el código de verificación';
+        }
       }
     });
   }

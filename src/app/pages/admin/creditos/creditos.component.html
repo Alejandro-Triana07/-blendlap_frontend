@@ -280,9 +280,7 @@
             </button>
           </div>
           <div class="producto-resultado" *ngIf="productoEncontrado">
-            <img [src]="productoEncontrado.imagen
-              ? 'http://localhost:3001/images/productos/' + productoEncontrado.imagen
-              : 'assets/images/no-img.png'" [alt]="productoEncontrado.nombre_producto" />
+            <img [src]="productoEncontrado.imagen | mediaUrl:'productos'" [alt]="productoEncontrado.nombre_producto" />
             <div class="prod-resultado-info">
               <span class="prod-codigo">{{ productoEncontrado.codigo_producto }}</span>
               <span class="prod-nombre">{{ productoEncontrado.nombre_producto }}</span>
@@ -303,9 +301,7 @@
           <label class="sec-titulo">Productos seleccionados</label>
           <div class="seleccionados">
             <div class="sel-item" *ngFor="let s of productosSeleccionados">
-              <img [src]="s.producto.imagen
-                ? 'http://localhost:3001/images/productos/' + s.producto.imagen
-                : 'assets/images/no-img.png'" [alt]="s.producto.nombre_producto" />
+              <img [src]="s.producto.imagen | mediaUrl:'productos'" [alt]="s.producto.nombre_producto" />
               <div class="sel-data">
                 <span class="sel-codigo">{{ s.producto.codigo_producto }}</span>
                 <span class="sel-nombre">{{ s.producto.nombre_producto }}</span>
@@ -400,9 +396,7 @@
           <h3>Productos</h3>
           <div class="detalle-productos">
             <div class="det-prod" *ngFor="let p of creditoDetalle.productos">
-              <img [src]="p.imagen
-                ? 'http://localhost:3001/images/productos/' + p.imagen
-                : 'assets/images/no-img.png'" [alt]="p.nombre_producto" />
+              <img [src]="p.imagen | mediaUrl:'productos'" [alt]="p.nombre_producto" />
               <span class="det-nombre">{{ p.nombre_producto }}</span>
               <span>x{{ p.cantidad }}</span>
               <span class="det-precio">{{ formatCurrency(p.subtotal) }}</span>

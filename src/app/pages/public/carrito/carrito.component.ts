@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CarritoService, IItemCarrito } from '../../../core/services/carrito.service';
 import { CreditoService } from '../../../core/services/credito.service';
+import { resolveMediaUrl } from '../../../core/utils/image-url.util';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -25,8 +26,6 @@ export class CarritoComponent implements OnInit {
     { id: '2_quincenas', label: '2 Quincenas', desc: '30 días' },
     { id: '1_mes',       label: '1 Mes',       desc: '1 mes'   }
   ];
-
-  imagenUrl = 'http://localhost:3001/images/productos/';
 
   constructor(
     private carritoService: CarritoService,
@@ -61,8 +60,7 @@ export class CarritoComponent implements OnInit {
   get cantidad(): number { return this.carritoService.cantidad; }
 
   getImagen(imagen?: string): string {
-    if (imagen) return `${this.imagenUrl}${imagen}`;
-    return 'assets/images/no-img.png';
+    return resolveMediaUrl(imagen, 'productos');
   }
 
   abrirConfirmar(): void {

@@ -6,7 +6,7 @@ import { CarritoService } from '../../../core/services/carrito.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { ResenaService } from '../../../core/services/resena.service';
-import { environment } from '../../../../environments/environment';
+import { resolveMediaUrl } from '../../../core/utils/image-url.util';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +16,6 @@ import { environment } from '../../../../environments/environment';
 export class HomeComponent implements OnInit {
 
   @ViewChild('galeriaTrack') galeriaTrack!: ElementRef;
-
-  imagenUrl = `${environment.apiUrl.replace('/api', '')}/images/productos/`;
 
   constructor(
     private servicioService: ServicioService,
@@ -236,8 +234,15 @@ export class HomeComponent implements OnInit {
   verMenosProductos(): void { this.productosVisibles = 4; }
 
   getImagenProducto(p: IProducto): string {
-    if (p.imagen) return `${this.imagenUrl}${p.imagen}`;
-    return 'assets/images/no-img.png';
+    return resolveMediaUrl(p.imagen, 'productos');
+  }
+
+  getImagenServicio(imagen?: string | null): string {
+    return resolveMediaUrl(imagen, 'servicios');
+  }
+
+  getImagenBarbero(foto?: string | null): string {
+    return resolveMediaUrl(foto, 'barberos');
   }
 
   abrirModal(producto: IProducto): void {

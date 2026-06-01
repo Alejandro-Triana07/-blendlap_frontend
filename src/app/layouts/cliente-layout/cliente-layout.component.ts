@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
     <app-navbar></app-navbar>
     <router-outlet></router-outlet>
     <app-carrito-drawer></app-carrito-drawer>
+    <app-chat-widget></app-chat-widget>
   `
 })
 export class ClienteLayoutComponent {}

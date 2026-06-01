@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
     <router-outlet></router-outlet>
     <app-footer></app-footer>
     <app-carrito-drawer></app-carrito-drawer>
+    <app-chat-widget></app-chat-widget>
   `
 })
 export class PublicLayoutComponent {}

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CarritoService, IItemCarrito } from '../../../core/services/carrito.service';
 import { CreditoService } from '../../../core/services/credito.service';
+import { resolveMediaUrl } from '../../../core/utils/image-url.util';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -26,13 +27,15 @@ export class CarritoDrawerComponent implements OnInit {
     { id: '1_mes',       label: '1 Mes',    desc: '1 mes'   }
   ];
 
-  imagenUrl = 'http://localhost:3001/images/productos/';
+  getImagen(imagen?: string): string {
+    return resolveMediaUrl(imagen, 'productos');
+  }
 
   constructor(
     private carritoService: CarritoService,
     private creditoService: CreditoService,
-    private authService:    AuthService,
-    private router:         Router
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -55,10 +58,6 @@ export class CarritoDrawerComponent implements OnInit {
   quitar(id: number): void { this.carritoService.quitar(id); }
 
   get total(): number { return this.carritoService.total; }
-
-  getImagen(imagen?: string): string {
-    return imagen ? `${this.imagenUrl}${imagen}` : 'assets/images/no-img.png';
-  }
 
   formatCurrency(v: number): string {
     return new Intl.NumberFormat('es-CO', {

@@ -29,7 +29,7 @@
           <div class="resumen-item" *ngFor="let item of items">
             <div class="resumen-item__img-wrap">
               <img
-                [src]="'http://localhost:3001/images/productos/' + item.producto.imagen"
+                [src]="item.producto.imagen | mediaUrl:'productos'"
                 [alt]="item.producto.nombre_producto"
                 onerror="this.src='/assets/images/placeholder.png'">
               <span class="resumen-item__qty">{{ item.cantidad }}</span>

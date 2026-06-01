@@ -21,6 +21,8 @@ import { ClienteLayoutComponent } from './layouts/cliente-layout/cliente-layout.
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { CarritoDrawerComponent } from './shared/components/carrito-drawer/carrito-drawer.component';
+import { ChatWidgetComponent } from './shared/components/chat-widget/chat-widget.component';
+import { MediaUrlPipe } from './shared/pipes/media-url.pipe';
 
 import { HomeComponent } from './pages/public/home/home.component';
 import { LoginComponent } from './pages/public/login/login.component';
@@ -59,6 +61,7 @@ import { ValoresComponent } from './pages/public/nosotros/valores/valores.compon
     NavbarComponent,
     FooterComponent,
     CarritoDrawerComponent,
+    ChatWidgetComponent,
     PublicLayoutComponent,
     AdminLayoutComponent,
     BarberoLayoutComponent,
@@ -90,6 +93,7 @@ import { ValoresComponent } from './pages/public/nosotros/valores/valores.compon
     MisionComponent,
     TrabajaComponent,
     ValoresComponent,
+    MediaUrlPipe,
   ],
   imports: [
     BrowserModule,

@@ -77,7 +77,7 @@
 
           <div class="ag-servicio__img">
             <img *ngIf="s.imagen"
-              [src]="'http://localhost:3001/images/servicios/' + s.imagen"
+              [src]="s.imagen | mediaUrl:'servicios'"
               [alt]="s.nombre_servicio" />
             <div *ngIf="!s.imagen" class="ag-servicio__img-empty">
               <i class="fas fa-cut"></i>
@@ -115,7 +115,7 @@
 
         <div class="ag-barbero__foto">
           <img *ngIf="b.foto"
-            [src]="'http://localhost:3001/images/barberos/' + b.foto"
+            [src]="b.foto | mediaUrl:'barberos'"
             [alt]="b.nombre" />
           <div *ngIf="!b.foto" class="ag-barbero__foto-empty">
             <i class="fas fa-user-tie"></i>
@@ -218,7 +218,7 @@
       <div class="ag-confirm-row ag-confirm-row--barbero">
         <div class="ag-confirm-barbero-foto">
           <img *ngIf="barberoSeleccionado?.foto"
-            [src]="'http://localhost:3001/images/barberos/' + barberoSeleccionado?.foto"
+            [src]="barberoSeleccionado?.foto | mediaUrl:'barberos'"
             [alt]="barberoSeleccionado?.nombre" />
           <i *ngIf="!barberoSeleccionado?.foto" class="fas fa-user-tie"></i>
         </div>
@@ -262,7 +262,7 @@
       <div class="ag-confirm-row ag-confirm-row--servicio" *ngFor="let s of serviciosSeleccionados">
         <div class="ag-confirm-servicio-img">
           <img *ngIf="s.imagen"
-            [src]="'http://localhost:3001/images/servicios/' + s.imagen"
+            [src]="s.imagen | mediaUrl:'servicios'"
             [alt]="s.nombre_servicio" />
           <i *ngIf="!s.imagen" class="fas fa-cut"></i>
         </div>

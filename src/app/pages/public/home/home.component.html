@@ -29,7 +29,7 @@
       <div class="barbero-card" *ngFor="let barbero of barberos" (click)="abrirModalBarbero(barbero)"
         style="cursor:pointer">
         <div class="barbero-card__imagen">
-          <img *ngIf="barbero.foto" [src]="'http://localhost:3001/images/barberos/' + barbero.foto"
+          <img *ngIf="barbero.foto" [src]="getImagenBarbero(barbero.foto)"
             [alt]="barbero.nombre">
           <div *ngIf="!barbero.foto" class="barbero-card__foto--empty">
             <i class="fas fa-user-tie"></i>
@@ -100,7 +100,7 @@
       <button class="modal__cerrar" (click)="cerrarModalBarbero()">
         <i class="fas fa-times"></i>
       </button>
-      <img *ngIf="barberoSeleccionado.foto" [src]="'http://localhost:3001/images/barberos/' + barberoSeleccionado.foto"
+      <img *ngIf="barberoSeleccionado.foto" [src]="getImagenBarbero(barberoSeleccionado.foto)"
         [alt]="barberoSeleccionado.nombre" />
       <div *ngIf="!barberoSeleccionado.foto" class="modal__imagen--empty">
         <i class="fas fa-user-tie"></i>
@@ -201,7 +201,7 @@
       <div class="servicios__grid">
         <div class="servicio-card" *ngFor="let servicio of grupoActualServicios">
           <div class="servicio-card__imagen">
-            <img [src]="'http://localhost:3001/images/servicios/' + servicio.imagen" [alt]="servicio.nombre_servicio">
+            <img *ngIf="servicio.imagen" [src]="getImagenServicio(servicio.imagen)" [alt]="servicio.nombre_servicio">
             <div class="servicio-card__badge">
               <i class="fas fa-clock"></i> {{ servicio.duracion }} min
             </div>
@@ -227,7 +227,7 @@
       <div class="servicios__lista-movil">
         <div class="servicio-item-movil" *ngFor="let servicio of serviciosPorCategoria">
           <div class="servicio-item-movil__img">
-            <img *ngIf="servicio.imagen" [src]="'http://localhost:3001/images/servicios/' + servicio.imagen"
+            <img *ngIf="servicio.imagen" [src]="getImagenServicio(servicio.imagen)"
               [alt]="servicio.nombre_servicio" />
             <div *ngIf="!servicio.imagen" class="servicio-item-movil__img--empty">
               <i class="fas fa-cut"></i>
