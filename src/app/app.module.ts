@@ -50,22 +50,26 @@ import { StatsComponent } from './pages/barbero/stats/stats.component';
 import { HorarioComponent } from './pages/barbero/horario/horario.component';
 
 import { DashboardComponent as ClienteDashboardComponent } from './pages/cliente/dashboard/dashboard.component';
+import { PerfilComponent } from './pages/cliente/perfil/perfil.component';
 import { HistoriaComponent } from './pages/public/nosotros/historia/historia.component';
 import { MisionComponent } from './pages/public/nosotros/mision/mision.component';
 import { TrabajaComponent } from './pages/public/nosotros/trabaja/trabaja.component';
 import { ValoresComponent } from './pages/public/nosotros/valores/valores.component';
-
+import { ImgUrlPipe } from './shared/pipes/img-url.pipe';
+import { ToastComponent } from './shared/components/toast/toast.component';
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
+    ImgUrlPipe,
+    MediaUrlPipe,
     FooterComponent,
-    CarritoDrawerComponent,
-    ChatWidgetComponent,
     PublicLayoutComponent,
     AdminLayoutComponent,
     BarberoLayoutComponent,
     ClienteLayoutComponent,
+    CarritoDrawerComponent,
+    ChatWidgetComponent,
     HomeComponent,
     LoginComponent,
     RegistroComponent,
@@ -89,11 +93,12 @@ import { ValoresComponent } from './pages/public/nosotros/valores/valores.compon
     StatsComponent,
     HorarioComponent,
     ClienteDashboardComponent,
+    PerfilComponent,
+    ToastComponent,
     HistoriaComponent,
     MisionComponent,
     TrabajaComponent,
     ValoresComponent,
-    MediaUrlPipe,
   ],
   imports: [
     BrowserModule,

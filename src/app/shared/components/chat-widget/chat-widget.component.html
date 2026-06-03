@@ -31,9 +31,7 @@
           <span>Asistente Blendlap</span>
         </div>
       </div>
-      <button type="button" class="chat-widget__cerrar" (click)="cerrar()" aria-label="Cerrar">
-        <i class="fas fa-times"></i>
-      </button>
+
     </header>
 
     <div class="chat-widget__mensajes" #mensajesContainer>
@@ -44,7 +42,7 @@
         [class.chat-widget__msg--bot]="m.role === 'bot'"
         [class.chat-widget__msg--wide]="tieneTarjetas(m)">
         <span class="chat-widget__msg-label" *ngIf="m.role === 'bot'">BARBUX</span>
-        <span class="chat-widget__msg-text">{{ m.text }}</span>
+        <span class="chat-widget__msg-text" [innerHTML]="m.text"></span>
 
         <div class="chat-widget__auth-actions" *ngIf="m.requiresAuth && esInvitado">
           <button type="button" class="chat-widget__auth-btn" (click)="irALogin()">
@@ -69,7 +67,9 @@
               <span
                 class="chat-widget__catalog-badge"
                 *ngIf="c.badge"
-                [class.chat-widget__catalog-badge--out]="c.badge === 'Agotado'">
+                [class.chat-widget__catalog-badge--out]="c.badge === 'Agotado'"
+                [class.chat-widget__catalog-badge--premium]="c.badge === 'Premium'"
+                [class.chat-widget__catalog-badge--clasico]="c.badge === 'Clásico' || c.badge === 'Clasico'">
                 {{ c.badge }}
               </span>
             </div>

@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { BarberoService, IBarbero } from '../../../core/services/barbero.service';
-import { resolveMediaUrl } from '../../../core/utils/image-url.util';
 
 @Component({
   selector: 'app-barberos',
@@ -61,7 +60,7 @@ export class BarberosComponent implements OnInit {
     this.editando = !!barbero;
     this.formulario = barbero ? { ...barbero } : this.formularioVacio();
     this.archivoSeleccionado = null;
-    this.previewFoto = barbero?.foto ? resolveMediaUrl(barbero.foto, 'barberos') : '';
+    this.previewFoto = barbero?.foto ?? '';
     this.modalVisible = true;
   }
 
@@ -91,7 +90,8 @@ export class BarberosComponent implements OnInit {
     this.guardando = true;
 
     if (this.archivoSeleccionado) {
-      this.barberoService.uploadFoto(this.archivoSeleccionado).subscribe({
+      const idBarbero = this.editando ? this.formulario.id_usuario : undefined;
+      this.barberoService.uploadFoto(this.archivoSeleccionado, idBarbero).subscribe({
         next: (res) => {
           this.formulario.foto = res.nombreArchivo;
           this.archivoSeleccionado = null;

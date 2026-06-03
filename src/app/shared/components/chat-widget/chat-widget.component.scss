@@ -35,17 +35,18 @@ $borde: #e5e7eb;
     display: none;
   }
 }
-
 .chat-widget__fab-bubble {
   position: absolute;
   right: calc(100% + 0.65rem);
   bottom: 1rem;
   margin: 0;
-  max-width: 200px;
+  width: 220px;
+  max-width: 220px;
   padding: 0.55rem 0.75rem;
   font-size: 0.72rem;
   font-weight: 600;
   line-height: 1.35;
+  text-align: center;
   color: $primary;
   background: $white;
   border: 2px solid $accent;
@@ -420,12 +421,32 @@ $borde: #e5e7eb;
 }
 
 .chat-widget__catalog-badge {
-  font-size: 0.68rem;
-  color: #15803d;
-  font-weight: 600;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 0.2rem;
+
+  &--premium {
+    background: rgba(251, 196, 71, 0.12);
+    color: #b48511;
+    border: 1px solid rgba(251, 196, 71, 0.35);
+  }
+
+  &--clasico {
+    background: rgba(100, 116, 139, 0.12);
+    color: #475569;
+    border: 1px solid rgba(100, 116, 139, 0.35);
+  }
 
   &--out {
+    background: rgba(239, 68, 68, 0.1);
     color: #b91c1c;
+    border: 1px solid rgba(239, 68, 68, 0.3);
   }
 }
 

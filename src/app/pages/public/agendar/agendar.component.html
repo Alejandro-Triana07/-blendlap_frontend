@@ -1,8 +1,8 @@
 <!-- ── NAVBAR ─────────────────────────────────────────────────── -->
 <header class="ag-nav">
-  <button class="ag-nav__back" (click)="pasoIndex === 0 ? irAlHome() : pasoAnterior()">
+  <button class="ag-nav__back" (click)="irAlHome()">
     <i class="fas fa-arrow-left"></i>
-    {{ pasoIndex === 0 ? 'Inicio' : 'Volver' }}
+    Inicio
   </button>
 
   <div class="ag-nav__logo">
@@ -42,11 +42,6 @@
     </div>
   </div>
 
-  <!-- ERROR -->
-  <div class="ag-error" *ngIf="error">
-    <i class="fas fa-exclamation-circle"></i> {{ error }}
-  </div>
-
   <!-- ═══════════════════════════════════════════════════════════
        PASO 1 — SERVICIO
   ══════════════════════════════════════════════════════════════ -->
@@ -77,7 +72,7 @@
 
           <div class="ag-servicio__img">
             <img *ngIf="s.imagen"
-              [src]="s.imagen | mediaUrl:'servicios'"
+              [src]="s.imagen | imgUrl"
               [alt]="s.nombre_servicio" />
             <div *ngIf="!s.imagen" class="ag-servicio__img-empty">
               <i class="fas fa-cut"></i>
@@ -115,7 +110,7 @@
 
         <div class="ag-barbero__foto">
           <img *ngIf="b.foto"
-            [src]="b.foto | mediaUrl:'barberos'"
+            [src]="b.foto | imgUrl"
             [alt]="b.nombre" />
           <div *ngIf="!b.foto" class="ag-barbero__foto-empty">
             <i class="fas fa-user-tie"></i>
@@ -167,9 +162,15 @@
             [class.cerrado]="dia.fecha && esDiaCerrado(dia)"
             [class.disponible]="dia.fecha && dia.disponible"
             [class.seleccionado]="esDiaSeleccionado(dia)"
+            [class.con-citas]="dia.fecha && tieneReservasFecha(formatearFechaIso(dia.fecha))"
             (click)="seleccionarFecha(dia)">
-            {{ dia.fecha?.getDate() }}
+            <span class="dia-num">{{ dia.fecha?.getDate() }}</span>
+            <span class="dia-ocupado-dot" *ngIf="dia.fecha && tieneReservasFecha(formatearFechaIso(dia.fecha))" style="color: #ef5350; font-size: 0.65rem; display: block; margin-top: -2px; line-height: 1;">●</span>
           </div>
+        </div>
+        <!-- Advertencia si la fecha tiene citas ocupadas -->
+        <div *ngIf="fechaSeleccionada && tieneReservasFecha(fechaSeleccionada)" style="color: #c62828; font-weight: 700; font-size: 0.82rem; text-align: center; border: 1.5px solid rgba(239, 83, 80, 0.2); background: rgba(239, 83, 80, 0.05); padding: 0.45rem 0.85rem; border-radius: 8px; margin-top: 10px; font-family: var(--font-secondary);">
+          <i class="fas fa-exclamation-triangle"></i> Esta fecha tiene citas ocupadas para el barbero
         </div>
       </div>
 
@@ -196,6 +197,7 @@
             [disabled]="!slot.disponible"
             (click)="onSlotClick(slot.hora)">
             {{ formatearHora(slot.hora) }}
+            <span class="slot-ocupado-texto" *ngIf="!slot.disponible" style="color: #c62828; display: block; font-size: 0.65rem; font-weight: bold; margin-top: 2px;">(Ocupado)</span>
           </button>
         </div>
       </div>
@@ -218,7 +220,7 @@
       <div class="ag-confirm-row ag-confirm-row--barbero">
         <div class="ag-confirm-barbero-foto">
           <img *ngIf="barberoSeleccionado?.foto"
-            [src]="barberoSeleccionado?.foto | mediaUrl:'barberos'"
+            [src]="barberoSeleccionado?.foto | imgUrl"
             [alt]="barberoSeleccionado?.nombre" />
           <i *ngIf="!barberoSeleccionado?.foto" class="fas fa-user-tie"></i>
         </div>
@@ -262,7 +264,7 @@
       <div class="ag-confirm-row ag-confirm-row--servicio" *ngFor="let s of serviciosSeleccionados">
         <div class="ag-confirm-servicio-img">
           <img *ngIf="s.imagen"
-            [src]="s.imagen | mediaUrl:'servicios'"
+            [src]="s.imagen | imgUrl"
             [alt]="s.nombre_servicio" />
           <i *ngIf="!s.imagen" class="fas fa-cut"></i>
         </div>
@@ -326,11 +328,7 @@
     <button class="planes-close" (click)="cerrarModalPlanes()">✕</button>
 
     <div class="planes-logo">
-      <span class="planes-logo__icon">✂</span>
-      <div>
-        <span class="planes-logo__nombre">BLENDLAP</span>
-        <span class="planes-logo__sub">NUESTROS SERVICIOS</span>
-      </div>
+      <img src="assets/images/navbar/logo.png" alt="Blendlap" class="planes-logo__img" />
     </div>
 
     <div class="planes-header">
@@ -352,6 +350,7 @@
       </div>
 
       <div class="plan-card plan-card--plata">
+        <div class="plan-card__vip" style="background:#c0c0c0; color:#1a1a1a">PLATA</div>
         <div class="plan-card__emoji"><i class="fas fa-spa"></i></div>
         <div class="plan-card__titulo">PLATA</div>
         <div class="plan-card__subtitulo">EXPERIENCIA COMPLETA</div>
@@ -366,7 +365,7 @@
       </div>
 
       <div class="plan-card plan-card--oro">
-        <div class="plan-card__vip">VIP</div>
+        <div class="plan-card__vip">ORO</div>
         <div class="plan-card__emoji"><i class="fas fa-crown"></i></div>
         <div class="plan-card__titulo">ORO</div>
         <div class="plan-card__subtitulo">LA EXPERIENCIA VIP</div>
@@ -391,6 +390,5 @@
       <i class="fas fa-chevron-right"></i>
     </button>
 
-    <p class="planes-footer">Gracias por elegir Blendlap 🖤</p>
   </div>
 </div>

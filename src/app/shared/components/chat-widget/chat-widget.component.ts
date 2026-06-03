@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { AuthService, IUsuario } from '../../../core/services/auth.service';
 import {
   ChatService,
@@ -41,6 +42,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   ];
 
   sugerencias: IChatOption[] = [];
+  reservaActiva = false;
 
   abierto = false;
   enviando = false;
@@ -60,11 +62,22 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.sub = new Subscription();
     this.actualizarSugerencias();
-    this.sub = this.authService.usuario$.subscribe(u => {
+
+    const userSub = this.authService.usuario$.subscribe(u => {
       this.usuario = u;
       this.actualizarSugerencias();
     });
+
+    const routeSub = this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.actualizarSugerencias();
+      });
+
+    this.sub.add(userSub);
+    this.sub.add(routeSub);
   }
 
   ngOnDestroy(): void {
@@ -80,15 +93,33 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   }
 
   private actualizarSugerencias(): void {
-    this.sugerencias = [...(this.esCliente ? this.sugerenciasCliente : this.sugerenciasInvitado)];
+    const rawOptions = [...(this.esCliente ? this.sugerenciasCliente : this.sugerenciasInvitado)];
+    this.sugerencias = this.filtrarSugerencias(rawOptions);
   }
 
   private filtrarSugerencias(options: IChatOption[]): IChatOption[] {
-    if (this.esCliente) return options;
-    return options.filter((s) => {
-      const v = s.value.trim().toLowerCase();
-      return v !== 'agendar cita' && v !== 'mis citas';
-    });
+    if (!options) return [];
+    let filtered = options;
+
+    if (this.esInvitado) {
+      filtered = filtered.filter((s) => {
+        const v = s.value?.trim().toLowerCase() || '';
+        return v !== 'agendar cita' && v !== 'mis citas';
+      });
+    }
+
+    const isHome = this.router?.url?.split('?')[0] === '/';
+    const hasInteracted = this.mensajes?.some((m) => m.role === 'user') || false;
+
+    if (isHome && !hasInteracted) {
+      filtered = filtered.filter((s) => {
+        const val = s.value?.trim().toLowerCase() || '';
+        const lbl = s.label?.trim().toLowerCase() || '';
+        return val !== 'volver al inicio' && lbl !== 'volver al inicio';
+      });
+    }
+
+    return filtered;
   }
 
   private mensajeBienvenida(): string {
@@ -199,10 +230,23 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
           } else {
             this.mensajes.push(botMsg);
           }
+          const step = res.data.meta?.['step'];
+          const intent = res.data.intent;
 
-          const opciones = res.data.meta?.options?.length
-            ? res.data.meta.options
-            : (this.esCliente ? this.sugerenciasCliente : this.sugerenciasInvitado);
+          if (step) {
+            this.reservaActiva = true;
+          } else if (res.data.meta?.freshStart || intent !== 'create_reservation') {
+            this.reservaActiva = false;
+          }
+
+          let opciones = res.data.meta?.options;
+          if (!opciones || opciones.length === 0) {
+            if (this.reservaActiva) {
+              opciones = [{ label: 'Cancelar', value: 'cancelar' }];
+            } else {
+              opciones = this.esCliente ? this.sugerenciasCliente : this.sugerenciasInvitado;
+            }
+          }
           this.sugerencias = this.filtrarSugerencias(opciones);
 
           if (catalogCards.length || botMsg.products?.length) {
@@ -230,6 +274,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
 
   usarSugerencia(texto: string): void {
     if (this.enviando) return;
+    if (texto.trim().toLowerCase() === 'volver al inicio') {
+      this.router.navigate(['/']);
+    }
     this.input = texto;
     this.enviar();
   }

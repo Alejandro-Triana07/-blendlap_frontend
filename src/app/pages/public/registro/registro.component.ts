@@ -43,7 +43,7 @@ export class RegistroComponent implements OnInit {
     switch (rol) {
       case 'admin':   this.router.navigate(['/admin/dashboard']); break;
       case 'barbero': this.router.navigate(['/barbero/dashboard']); break;
-      default:        this.router.navigate(['/']);
+      default:        this.router.navigate(['/cliente/mis-citas']);
     }
   }
 
@@ -95,11 +95,7 @@ export class RegistroComponent implements OnInit {
       },
       error: (err) => {
         this.cargando = false;
-        if (err.status === 0) {
-          this.error = 'No se pudo conectar con el servidor. Verifica que el backend esté corriendo (puerto 3000).';
-        } else {
-          this.error = err.error?.mensaje || 'Error al enviar el código de verificación';
-        }
+        this.error = err.error?.mensaje || 'Error al enviar el código de verificación';
       }
     });
   }

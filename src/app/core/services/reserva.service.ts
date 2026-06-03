@@ -74,6 +74,12 @@ export class ReservaService {
     );
   }
 
+  getOcupacionBarbero(id_barbero: number): Observable<{ ok: boolean; data: string[] }> {
+    return this.http.get<{ ok: boolean; data: string[] }>(
+      `${this.url}/ocupacion-barbero?id_barbero=${id_barbero}`
+    );
+  }
+
   crear(data: ICrearReserva): Observable<{ ok: boolean; data: any }> {
     return this.http.post<{ ok: boolean; data: any }>(this.url, data);
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { HorarioService, IHorarioDia, IExcepcion } from '../../../core/services/horario.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-horario',
@@ -16,8 +17,14 @@ export class HorarioComponent implements OnInit {
   error = '';
 
   modalAgregar = false;
+  modoEdicion = false;
+  idExcepcionEditando: number | null = null;
   guardando = false;
   errorForm = '';
+
+  confirmarEliminar = false;
+  excepcionAEliminar: number | null = null;
+  eliminando = false;
 
   readonly diaHoy = new Date().getDay();
 
@@ -40,7 +47,8 @@ export class HorarioComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private horarioService: HorarioService
+    private horarioService: HorarioService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -111,13 +119,30 @@ export class HorarioComponent implements OnInit {
   }
 
   abrirModalAgregar(): void {
+    this.modoEdicion = false;
+    this.idExcepcionEditando = null;
     this.nuevaExcepcion = { dia_semana: 1, hora_inicio: '', hora_fin: '', motivo: '' };
+    this.errorForm = '';
+    this.modalAgregar = true;
+  }
+
+  abrirModalEditar(exc: IExcepcion): void {
+    this.modoEdicion = true;
+    this.idExcepcionEditando = exc.id_excepcion!;
+    this.nuevaExcepcion = {
+      dia_semana: exc.dia_semana,
+      hora_inicio: exc.hora_inicio,
+      hora_fin: exc.hora_fin,
+      motivo: exc.motivo ?? ''
+    };
     this.errorForm = '';
     this.modalAgregar = true;
   }
 
   cerrarModalAgregar(): void {
     this.modalAgregar = false;
+    this.modoEdicion = false;
+    this.idExcepcionEditando = null;
     this.errorForm = '';
   }
 
@@ -132,23 +157,53 @@ export class HorarioComponent implements OnInit {
     }
     this.guardando = true;
     this.errorForm = '';
-    this.horarioService.crearExcepcion(this.nuevaExcepcion).subscribe({
+
+    const request$ = this.modoEdicion && this.idExcepcionEditando !== null
+      ? this.horarioService.actualizarExcepcion(this.idExcepcionEditando, this.nuevaExcepcion)
+      : this.horarioService.crearExcepcion(this.nuevaExcepcion);
+
+    request$.subscribe({
       next: () => {
         this.guardando = false;
         this.cerrarModalAgregar();
         this.cargarExcepciones();
+        this.toast.success(
+          this.modoEdicion ? 'Descanso actualizado' : 'Descanso agregado',
+          'El bloque de descanso fue guardado correctamente.'
+        );
       },
       error: (err) => {
         this.errorForm = err.error?.mensaje || 'Error al guardar';
         this.guardando = false;
+        this.toast.error('Error al guardar', err.error?.mensaje || 'Ocurrió un error inesperado.');
       }
     });
   }
 
-  eliminarExcepcion(id: number): void {
-    this.horarioService.eliminarExcepcion(id).subscribe({
-      next: () => this.cargarExcepciones(),
-      error: () => this.error = 'Error al eliminar'
+  pedirConfirmarEliminar(id: number): void {
+    this.excepcionAEliminar = id;
+    this.confirmarEliminar = true;
+  }
+
+  cancelarEliminar(): void {
+    this.confirmarEliminar = false;
+    this.excepcionAEliminar = null;
+  }
+
+  confirmarEliminarExcepcion(): void {
+    if (this.excepcionAEliminar === null) return;
+    this.eliminando = true;
+    this.horarioService.eliminarExcepcion(this.excepcionAEliminar).subscribe({
+      next: () => {
+        this.eliminando = false;
+        this.cancelarEliminar();
+        this.cargarExcepciones();
+        this.toast.success('Descanso eliminado', 'El bloque de descanso fue eliminado correctamente.');
+      },
+      error: () => {
+        this.eliminando = false;
+        this.toast.error('Error al eliminar', 'No se pudo eliminar el descanso. Intentá de nuevo.');
+      }
     });
   }
 

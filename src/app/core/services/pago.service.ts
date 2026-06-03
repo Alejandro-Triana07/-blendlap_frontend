@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 
 export interface IIniciarPagoPayload {
   items: {
@@ -56,7 +55,7 @@ export interface ICompra {
 @Injectable({ providedIn: 'root' })
 export class PagoService {
 
-  private api = `${environment.apiUrl}/pagos`;
+  private api = 'http://localhost:3001/api/pagos';
 
   constructor(private http: HttpClient) {}
 

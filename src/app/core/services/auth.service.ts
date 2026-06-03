@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
 
 export interface IUsuario {
   id_usuario: number;
@@ -10,6 +9,8 @@ export interface IUsuario {
   apellido: string;
   correo_electronico: string;
   rol: 'admin' | 'barbero' | 'cliente';
+  telefono?: string;
+  foto?: string;
 }
 
 export interface ILoginResponse {
@@ -23,7 +24,7 @@ export interface ILoginResponse {
 })
 export class AuthService {
 
-  private apiUrl = `${environment.apiUrl}/auth`;
+  private apiUrl = 'http://localhost:3001/api/auth';
   private usuarioSubject = new BehaviorSubject<IUsuario | null>(null);
   usuario$ = this.usuarioSubject.asObservable();
 
@@ -127,6 +128,22 @@ export class AuthService {
       `${this.apiUrl}/resetear-password`,
       { correo_electronico, codigo, nueva_contrasena }
     );
+  }
+
+  obtenerMiPerfil(): Observable<{ ok: boolean; data: IUsuario }> {
+    return this.http.get<{ ok: boolean; data: IUsuario }>(`${this.apiUrl}/mi-perfil`);
+  }
+
+  actualizarMiPerfil(formData: FormData): Observable<{ ok: boolean; data: IUsuario }> {
+    return this.http.put<{ ok: boolean; data: IUsuario }>(`${this.apiUrl}/mi-perfil`, formData);
+  }
+
+  actualizarUsuarioLocal(datos: Partial<IUsuario>): void {
+    const actual = this.usuarioSubject.value;
+    if (!actual) return;
+    const actualizado = { ...actual, ...datos };
+    localStorage.setItem('usuario', JSON.stringify(actualizado));
+    this.usuarioSubject.next(actualizado);
   }
 
   // Google Login
