@@ -50,6 +50,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   input = '';
   usuario: IUsuario | null = null;
   mensajes: IChatMessage[] = [];
+  permitirMensajeFlotante = true;
 
   @ViewChild('mensajesContainer') mensajesContainer?: ElementRef<HTMLDivElement>;
 
@@ -90,6 +91,10 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
 
   get esInvitado(): boolean {
     return !this.esCliente;
+  }
+
+  get mostrarChatbot(): boolean {
+    return !this.usuario || this.usuario.rol === 'cliente';
   }
 
   private actualizarSugerencias(): void {
@@ -171,6 +176,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
 
   toggle(): void {
     this.abierto = !this.abierto;
+    if (!this.abierto) {
+      this.permitirMensajeFlotante = false;
+    }
     if (this.abierto && this.mensajes.length === 0) {
       this.mensajes.push({
         role: 'bot',
@@ -184,6 +192,11 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
 
   cerrar(): void {
     this.abierto = false;
+    this.permitirMensajeFlotante = false;
+  }
+
+  onMouseLeaveWrap(): void {
+    this.permitirMensajeFlotante = true;
   }
 
   irALogin(): void {
