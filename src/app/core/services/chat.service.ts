@@ -34,6 +34,8 @@ export interface IChatMessage {
   products?: IChatProductCard[];
   catalogCards?: IChatCatalogCard[];
   requiresAuth?: boolean;
+  step?: string;
+  slots?: string[];
 }
 
 export interface IChatResponse {

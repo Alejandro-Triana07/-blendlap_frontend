@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, HostListener } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -59,16 +59,16 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   constructor(
     private chatService: ChatService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
     this.sub = new Subscription();
-    this.actualizarSugerencias();
 
     const userSub = this.authService.usuario$.subscribe(u => {
       this.usuario = u;
-      this.actualizarSugerencias();
+      this.cargarEstadoDeStorage();
     });
 
     const routeSub = this.router.events
@@ -216,6 +216,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     this.input = '';
     this.error = '';
     this.mensajes.push({ role: 'user', text: texto, at: new Date() });
+    this.guardarEstadoEnStorage();
     this.scrollAlFinal();
     this.enviando = true;
     this.scrollAlFinal();
@@ -229,6 +230,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
             text: res.data.reply,
             at: new Date(),
             requiresAuth: Boolean(res.data.meta?.requiresAuth),
+            step: res.data.meta?.['step'] as string,
+            slots: res.data.meta?.['slots'] as string[],
           };
           const catalogCards = this.parseCatalogCards(res.data.meta);
           if (catalogCards.length) {
@@ -261,6 +264,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
             }
           }
           this.sugerencias = this.filtrarSugerencias(opciones);
+          this.guardarEstadoEnStorage();
 
           if (catalogCards.length || botMsg.products?.length) {
             this.scrollAlFinal(150);
@@ -336,5 +340,131 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
         imagen: p.imagen ?? null,
         disponible: Boolean(p.disponible),
       }));
+  }
+
+  isLastMessage(m: IChatMessage): boolean {
+    return this.mensajes[this.mensajes.length - 1] === m;
+  }
+
+  get minDate(): string {
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, '0');
+    const d = String(today.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  onDateSelected(event: any): void {
+    const val = event.target.value;
+    if (!val || this.enviando) return;
+    this.input = val;
+    this.enviar();
+  }
+
+  formatHoraLegible(hora: string): string {
+    if (!hora) return '';
+    const parts = hora.split(':');
+    const h = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    if (isNaN(h) || isNaN(m)) return hora;
+    const sufijo = h >= 12 ? 'p.m.' : 'a.m.';
+    const h12 = h % 12 || 12;
+    return `${h12}:${String(m).padStart(2, '0')} ${sufijo}`;
+  }
+
+  seleccionarSlot(slot: string): void {
+    if (this.enviando) return;
+    this.input = slot;
+    this.enviar();
+  }
+
+  seleccionarCard(c: IChatCatalogCard): void {
+    if (this.enviando) return;
+    if (c.mediaFolder === 'servicios') {
+      if (this.reservaActiva) {
+        this.input = c.nombre;
+      } else {
+        this.input = `Agendar ${c.nombre}`;
+      }
+      this.enviar();
+    } else if (c.mediaFolder === 'barberos') {
+      if (this.reservaActiva) {
+        this.input = c.nombre;
+      } else {
+        this.input = `Agendar con ${c.nombre}`;
+      }
+      this.enviar();
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    if (!this.abierto) return;
+    
+    const element = this.elementRef.nativeElement;
+    const target = event.target as Node;
+    
+    // Si el elemento cliqueado ya no está en el DOM (removido por Angular),
+    // o si está contenido en el widget, se considera un clic interno.
+    const clickedInside = element.contains(target) || !document.body.contains(target);
+    
+    if (!clickedInside) {
+      this.abierto = false;
+      this.permitirMensajeFlotante = false;
+    }
+  }
+
+  private getStorageKey(): string {
+    const userId = this.usuario?.id_usuario || 'guest';
+    return `blendlap_chat_history_${userId}`;
+  }
+
+  private guardarEstadoEnStorage(): void {
+    try {
+      const state = {
+        mensajes: this.mensajes,
+        reservaActiva: this.reservaActiva,
+        sugerencias: this.sugerencias
+      };
+      localStorage.setItem(this.getStorageKey(), JSON.stringify(state));
+    } catch (e) {
+      console.error('Error saving chat state to localStorage', e);
+    }
+  }
+
+  private cargarEstadoDeStorage(): void {
+    try {
+      const key = this.getStorageKey();
+      const stored = localStorage.getItem(key);
+      if (stored) {
+        const state = JSON.parse(stored);
+        if (state && Array.isArray(state.mensajes) && state.mensajes.length > 0) {
+          this.mensajes = state.mensajes.map((m: any) => ({
+            ...m,
+            at: new Date(m.at)
+          }));
+          this.reservaActiva = Boolean(state.reservaActiva);
+          if (Array.isArray(state.sugerencias)) {
+            this.sugerencias = state.sugerencias;
+          } else {
+            this.actualizarSugerencias();
+          }
+          this.scrollAlFinal(50);
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Error loading chat state from localStorage', e);
+    }
+
+    // Fallback: mensaje de bienvenida por defecto
+    this.mensajes = [{
+      role: 'bot',
+      text: this.mensajeBienvenida(),
+      at: new Date()
+    }];
+    this.reservaActiva = false;
+    this.actualizarSugerencias();
+    this.scrollAlFinal(50);
   }
 }

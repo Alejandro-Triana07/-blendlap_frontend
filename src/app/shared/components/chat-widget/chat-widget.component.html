@@ -72,6 +72,12 @@
                 [class.chat-widget__catalog-badge--clasico]="c.badge === 'Clásico' || c.badge === 'Clasico'">
                 {{ c.badge }}
               </span>
+              <!-- Selection button for services and barbers -->
+              <div class="chat-widget__catalog-actions" *ngIf="(c.mediaFolder === 'servicios' || c.mediaFolder === 'barberos') && isLastMessage(m)">
+                <button type="button" class="chat-widget__card-btn" (click)="seleccionarCard(c)">
+                  {{ c.mediaFolder === 'barberos' ? 'Seleccionar' : (reservaActiva ? 'Reservar' : 'Seleccionar servicio') }}
+                </button>
+              </div>
             </div>
           </article>
         </div>
@@ -94,6 +100,30 @@
               </span>
             </div>
           </article>
+        </div>
+
+        <!-- Selector de Fecha (Calendario) -->
+        <div class="chat-widget__date-picker" *ngIf="m.step === 'fecha' && isLastMessage(m)">
+          <div class="chat-widget__date-container">
+            <span class="chat-widget__date-icon"><i class="fas fa-calendar-alt"></i></span>
+            <input
+              type="date"
+              [min]="minDate"
+              (change)="onDateSelected($event)"
+              class="chat-widget__date-input"
+            />
+          </div>
+        </div>
+
+        <!-- Selector de Hora (Slots) -->
+        <div class="chat-widget__slots" *ngIf="m.step === 'hora' && m.slots?.length && isLastMessage(m)">
+          <button
+            type="button"
+            class="chat-widget__slot-btn"
+            *ngFor="let slot of m.slots"
+            (click)="seleccionarSlot(slot)">
+            {{ formatHoraLegible(slot) }}
+          </button>
         </div>
       </div>
 
